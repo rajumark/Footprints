@@ -1,4 +1,4 @@
-package com.example.footprints.llm
+package raju.shingadiya.footprints.llm
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers

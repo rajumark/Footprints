@@ -1,4 +1,4 @@
-package com.example.footprints.theme
+package raju.shingadiya.footprints.theme
 
 import androidx.compose.ui.graphics.Color
 

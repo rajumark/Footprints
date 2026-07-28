@@ -1,4 +1,4 @@
-package com.example.footprints.ui.chat
+package raju.shingadiya.footprints.ui.chat
 
 import kotlinx.serialization.Serializable
 

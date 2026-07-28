@@ -1,4 +1,4 @@
-package com.example.footprints.ui.chat
+package raju.shingadiya.footprints.ui.chat
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -74,19 +74,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.footprints.R
-import com.example.footprints.theme.Border
-import com.example.footprints.theme.DarkBorder
-import com.example.footprints.theme.DarkOnSurface
-import com.example.footprints.theme.DarkPageBg
-import com.example.footprints.theme.DarkPrimary
-import com.example.footprints.theme.DarkSurface
-import com.example.footprints.theme.OnPrimary
-import com.example.footprints.theme.OnSurface
-import com.example.footprints.theme.PageBg
-import com.example.footprints.theme.Primary
-import com.example.footprints.theme.Surface
-import com.example.footprints.theme.AppDarkTheme
+import raju.shingadiya.footprints.R
+import raju.shingadiya.footprints.theme.Border
+import raju.shingadiya.footprints.theme.DarkBorder
+import raju.shingadiya.footprints.theme.DarkOnSurface
+import raju.shingadiya.footprints.theme.DarkPageBg
+import raju.shingadiya.footprints.theme.DarkPrimary
+import raju.shingadiya.footprints.theme.DarkSurface
+import raju.shingadiya.footprints.theme.OnPrimary
+import raju.shingadiya.footprints.theme.OnSurface
+import raju.shingadiya.footprints.theme.PageBg
+import raju.shingadiya.footprints.theme.Primary
+import raju.shingadiya.footprints.theme.Surface
+import raju.shingadiya.footprints.theme.AppDarkTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -564,7 +564,7 @@ fun ChatBubble(
     val onSurface = if (isDark) DarkOnSurface else OnSurface
     val surface = if (isDark) DarkSurface else Surface
     val primary = if (isDark) DarkPrimary else Primary
-    val onPrimary = if (isDark) DarkOnSurface else com.example.footprints.theme.OnPrimary
+    val onPrimary = if (isDark) DarkOnSurface else raju.shingadiya.footprints.theme.OnPrimary
     val border = if (isDark) DarkBorder else Border
 
     Column(

@@ -1,4 +1,4 @@
-package com.example.footprints.ui.chat
+package raju.shingadiya.footprints.ui.chat
 
 import android.app.Application
 import android.content.ContentValues
@@ -13,7 +13,7 @@ import android.speech.SpeechRecognizer
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footprints.llm.LlmEngine
+import raju.shingadiya.footprints.llm.LlmEngine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -154,8 +154,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun toggleDarkTheme() {
-        com.example.footprints.theme.AppDarkTheme = !com.example.footprints.theme.AppDarkTheme
-        _settings.value = _settings.value.copy(darkTheme = com.example.footprints.theme.AppDarkTheme)
+        raju.shingadiya.footprints.theme.AppDarkTheme = !raju.shingadiya.footprints.theme.AppDarkTheme
+        _settings.value = _settings.value.copy(darkTheme = raju.shingadiya.footprints.theme.AppDarkTheme)
     }
 
     // ---- Conversations ----

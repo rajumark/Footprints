@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace = "com.example.footprints"
+    namespace = "raju.shingadiya.footprints"
     compileSdk = 36
     defaultConfig {
-        applicationId = "com.example.footprints"
+        applicationId = "raju.shingadiya.footprints"
         minSdk = 30
         targetSdk = 36
         versionCode = 1

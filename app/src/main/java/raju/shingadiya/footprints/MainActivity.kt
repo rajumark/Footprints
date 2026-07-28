@@ -1,13 +1,13 @@
-package com.example.footprints
+package raju.shingadiya.footprints
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
-import com.example.footprints.llm.LlmEngine
-import com.example.footprints.theme.FootprintsTheme
-import com.example.footprints.ui.chat.ChatScreen
+import raju.shingadiya.footprints.llm.LlmEngine
+import raju.shingadiya.footprints.theme.FootprintsTheme
+import raju.shingadiya.footprints.ui.chat.ChatScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
