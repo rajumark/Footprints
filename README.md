@@ -1,8 +1,10 @@
-# 🦶 Footprints
+<div align="center">
+
+<img src="assets/elephant.png" alt="Footprints Logo" width="160"/>
+
+<h1>Footprints</h1>
 
 > **Your private AI companion. 100% on-device. 100% offline. Zero compromises.**
-
-<div align="center">
 
 [![Platform](https://img.shields.io/badge/Android-11%2B-3DDC84?logo=android&logoColor=white)](https://developer.android.com/about/versions/11)
 [![Model](https://img.shields.io/badge/Model-Qwen%202.5%200.5B-FF6B6B?logo=huggingface&logoColor=white)](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF)
