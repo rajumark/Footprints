@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Footprints — Private AI for Android</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{
@@ -15,17 +15,18 @@
       padding:60px 20px 100px;
       -webkit-font-smoothing:antialiased;
     }
-    .container{
-      max-width:1320px;margin:0 auto;
-    }
-
-    /* ── Card ── */
+    .container{max-width:1320px;margin:0 auto}
     .card{
       background:#FBF8EF;
       border:1.5px solid #3948A5;
       border-radius:34px;
       overflow:hidden;
       margin-bottom:48px;
+    }
+    .accent{color:#3948A5;opacity:0.7}
+    .label{
+      font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+      color:#3948A5;margin-bottom:16px;opacity:0.7;
     }
 
     /* ── HERO ── */
@@ -40,7 +41,6 @@
       color:#3948A5;text-decoration:none;transition:opacity 0.25s;
     }
     .hero-nav a:hover{opacity:0.7}
-
     .hero-nav .ig{width:18px;height:18px;display:block;opacity:0.7}
     .hero-btn{
       height:36px;padding:0 22px;
@@ -51,7 +51,11 @@
       transition:background 0.25s,color 0.25s;white-space:nowrap;
     }
     .hero-btn:hover{background:#3948A5;color:#fff}
-
+    .hero-btn.pulse{animation:pulseBtn 2s ease-in-out infinite}
+    @keyframes pulseBtn{
+      0%,100%{box-shadow:0 0 0 0 rgba(57,72,165,0.3)}
+      50%{box-shadow:0 0 0 12px rgba(57,72,165,0)}
+    }
     .hero-body{display:flex;flex:1;min-height:0}
     .hero-left{flex:0 0 50%;display:flex;flex-direction:column;justify-content:space-between;padding:0 0 0 55px;position:relative}
     .hero-left-top{padding-top:40px}
@@ -68,17 +72,13 @@
       font-size:96px;font-style:italic;font-weight:600;
       color:#3948A5;line-height:0.9;padding-bottom:60px;
     }
-
     .hero-right{flex:0 0 50%;position:relative;overflow:hidden}
-    .hero-right img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 8s ease}
     .hero-right:hover img{transform:scale(1.04)}
-
     .hero-cta{
       position:absolute;bottom:45px;right:45px;
       font-size:20px;color:#fff;letter-spacing:0.02em;
       font-weight:500;
     }
-
     @media(max-width:900px){
       .hero{height:auto}
       .hero-body{flex-direction:column}
@@ -94,8 +94,44 @@
       .hero-left-top h2{font-size:28px}
     }
 
+    /* ── PRIVACY BADGES ── */
+    .badge-strip{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:40px}
+    .badge{
+      display:flex;align-items:center;gap:8px;
+      height:40px;padding:0 20px;
+      border:1.5px solid #3948A5;border-radius:999px;
+      font-size:12px;font-weight:500;letter-spacing:0.06em;
+      color:#3948A5;background:#FBF8EF;
+      transition:background 0.3s,color 0.3s,transform 0.3s;
+    }
+    .badge:hover{background:#3948A5;color:#FBF8EF;transform:translateY(-2px)}
+    .badge svg{width:14px;height:14px;flex-shrink:0}
+
+    /* ── STATS COUNTERS ── */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1.5px solid #3948A5}
+    .stat-cell{
+      padding:40px 32px;text-align:center;
+      border-right:1.5px solid #3948A5;
+    }
+    .stat-cell:last-child{border-right:none}
+    .stat-num{
+      font-size:52px;font-weight:600;color:#3948A5;line-height:1;
+      font-variant-numeric:tabular-nums;
+    }
+    .stat-label{font-size:12px;color:#3948A5;opacity:0.7;margin-top:8px;letter-spacing:0.04em}
+    @media(max-width:768px){
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .stat-cell:nth-child(2){border-right:none}
+      .stat-cell:nth-child(1),.stat-cell:nth-child(2){border-bottom:1.5px solid #3948A5}
+    }
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr}
+      .stat-cell{border-right:none;border-bottom:1.5px solid #3948A5}
+      .stat-cell:last-child{border-bottom:none}
+    }
+
     /* ── SERVICES ── */
-    .services{height:620px;display:flex;flex-direction:column;position:relative}
+    .services{display:flex;flex-direction:column;position:relative}
     .services-header{
       display:flex;align-items:center;justify-content:space-between;
       padding:28px 40px 0;flex-shrink:0;
@@ -105,12 +141,8 @@
       font-size:42px;font-style:italic;font-weight:600;
       color:#3948A5;line-height:1;
     }
-    .services-body{display:flex;flex:1;padding:40px 40px 32px;gap:0;min-height:0}
+    .services-body{display:flex;padding:40px 40px 32px;gap:0;min-height:0}
     .services-left{flex:0 0 55%;display:flex;flex-direction:column}
-    .services-label{
-      font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
-      color:#3948A5;margin-bottom:16px;opacity:0.7;
-    }
     .services-left h2{
       font-size:52px;font-weight:500;max-width:540px;line-height:1.1;
       color:#3948A5;
@@ -120,53 +152,262 @@
       color:#3948A5;opacity:0.85;
     }
     .services-right{
-      flex:0 0 45%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:40px;
+      flex:0 0 45%;display:flex;flex-direction:column;align-items:center;padding-top:40px;
     }
-
-    /* ── Star ── */
-    .star{
-      width:140px;height:140px;margin-bottom:24px;
-      animation:floatStar 6s ease-in-out infinite;
-    }
-    @keyframes floatStar{
-      0%,100%{transform:translateY(0) rotate(8deg)}
-      50%{transform:translateY(-10px) rotate(8deg)}
-    }
-
-    /* ── Accordion ── */
-    .accordion{width:100%}
-    .acc-item{
-      display:flex;align-items:center;justify-content:space-between;
-      height:56px;padding:0 10px;
-      border-bottom:1.5px solid #3948A5;cursor:pointer;
-      transition:background 0.25s;
-    }
-    .acc-item:last-child{border-bottom:none}
-    .acc-item:hover{background:#F6F2E8}
-    .acc-item span{font-size:13px;font-weight:500;color:#3948A5}
-    .acc-item .plus{font-size:18px;font-weight:400;line-height:1}
-
-    .services-body .book-btn{
-      align-self:flex-end;margin-top:auto;
-      width:170px;height:42px;border-radius:999px;
-      border:1.5px solid #3948A5;background:transparent;
-      font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
-      letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;
-      cursor:pointer;transition:background 0.25s,color 0.25s;
-    }
-    .services-body .book-btn:hover{background:#3948A5;color:#fff}
-
     @media(max-width:900px){
-      .services{height:auto}
       .services-body{flex-direction:column;padding:24px}
       .services-left,.services-right{flex:1}
       .services-left h2{font-size:32px}
     }
-    @media(max-width:640px){
-      .services-header{padding:20px 24px;flex-wrap:wrap;gap:12px}
+
+    /* ── ACCORDION ── */
+    .accordion{width:100%}
+    .acc-item{border-bottom:1.5px solid #3948A5}
+    .acc-item:last-child{border-bottom:none}
+    .acc-header{
+      display:flex;align-items:center;justify-content:space-between;
+      height:56px;padding:0 10px;
+      cursor:pointer;transition:background 0.25s;user-select:none;
+    }
+    .acc-header:hover{background:#F6F2E8}
+    .acc-header span{font-size:13px;font-weight:500;color:#3948A5}
+    .acc-icon{font-size:18px;font-weight:400;line-height:1;transition:transform 0.3s}
+    .acc-item.open .acc-icon{transform:rotate(45deg)}
+    .acc-body{
+      max-height:0;overflow:hidden;
+      transition:max-height 0.35s ease,opacity 0.35s ease;opacity:0;
+      padding:0 10px;
+    }
+    .acc-item.open .acc-body{
+      max-height:300px;opacity:1;padding:0 10px 20px;
+    }
+    .acc-body p{
+      font-size:13px;line-height:170%;color:#3948A5;opacity:0.8;
     }
 
-    /* ── MORE SECTIONS ── */
+    /* ── MANIFESTO ── */
+    .manifesto-card{padding:80px 55px;text-align:center}
+    .manifesto-card .quote-mark{
+      font-family:'Cormorant Garamond',serif;
+      font-size:120px;line-height:0.4;color:#3948A5;opacity:0.2;
+    }
+    .manifesto-card blockquote{
+      font-family:'Cormorant Garamond',serif;
+      font-size:40px;font-style:italic;font-weight:600;
+      line-height:1.3;max-width:800px;margin:24px auto 16px;
+      color:#3948A5;
+    }
+    .manifesto-card .attribution{
+      font-size:13px;color:#3948A5;opacity:0.6;letter-spacing:0.06em;
+    }
+    @media(max-width:640px){
+      .manifesto-card{padding:48px 24px}
+      .manifesto-card blockquote{font-size:28px}
+    }
+
+    /* ── ARCHITECTURE ── */
+    .arch-card{padding:60px 55px}
+    .arch-grid{
+      display:flex;flex-direction:column;gap:4px;
+      margin-top:32px;max-width:700px;margin-left:auto;margin-right:auto;
+    }
+    .arch-layer{
+      display:flex;align-items:center;gap:16px;
+      padding:16px 24px;border-radius:12px;
+      border:1.5px solid #3948A5;
+      transition:transform 0.3s,box-shadow 0.3s;
+    }
+    .arch-layer:hover{transform:translateX(6px);box-shadow:-4px 4px 0 #3948A5}
+    .arch-dot{
+      width:10px;height:10px;border-radius:50%;
+      background:#3948A5;flex-shrink:0;
+    }
+    .arch-layer span:first-of-type{
+      font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+      min-width:100px;color:#3948A5;
+    }
+    .arch-layer span:last-of-type{
+      font-size:13px;color:#3948A5;opacity:0.8;
+    }
+    .arch-layer .arrow-down{
+      margin:0 auto;font-size:16px;color:#3948A5;opacity:0.4;display:block;text-align:center;
+    }
+    @media(max-width:640px){
+      .arch-card{padding:32px 24px}
+      .arch-layer{flex-wrap:wrap;gap:8px;padding:12px 16px}
+      .arch-layer span:first-of-type{min-width:70px}
+    }
+
+    /* ── SPECS TABLE ── */
+    .specs-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:0;
+      border-top:1.5px solid #3948A5;
+    }
+    .spec-row{
+      display:contents;
+    }
+    .spec-cell{
+      padding:16px 24px;font-size:13px;
+      border-bottom:1px solid rgba(57,72,165,0.2);
+      color:#3948A5;
+    }
+    .spec-cell:first-child{font-weight:600;opacity:0.7;letter-spacing:0.02em}
+    .spec-cell:nth-child(2){font-weight:500}
+    .spec-row:last-child .spec-cell{border-bottom:none}
+    @media(max-width:768px){
+      .specs-grid{grid-template-columns:1fr}
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-wrap{overflow-x:auto}
+    .compare-table{width:100%;border-collapse:collapse;font-size:13px}
+    .compare-table th{
+      text-align:left;padding:16px 20px;
+      font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+      color:#3948A5;opacity:0.7;border-bottom:1.5px solid #3948A5;
+      font-weight:600;
+    }
+    .compare-table td{
+      padding:14px 20px;border-bottom:1px solid rgba(57,72,165,0.15);
+      color:#3948A5;
+    }
+    .compare-table tr:last-child td{border-bottom:none}
+    .compare-table td:first-child{font-weight:500}
+    .compare-table .yes{color:#2E7D32;font-weight:600}
+    .compare-table .no{color:#B71C1C;opacity:0.5}
+    .compare-table .chip{
+      display:inline-block;padding:2px 10px;border-radius:999px;
+      font-size:11px;font-weight:500;letter-spacing:0.02em;
+    }
+    .compare-table .chip.green{background:#E8F5E9;color:#2E7D32}
+    .compare-table .chip.red{background:#FFEBEE;color:#B71C1C;opacity:0.7}
+
+    /* ── LATENCY ── */
+    .latency-wrap{padding:40px 55px}
+    .latency-bars{display:flex;flex-direction:column;gap:20px;margin-top:28px}
+    .latency-row{display:flex;align-items:center;gap:20px}
+    .latency-label{min-width:90px;font-size:13px;font-weight:500;color:#3948A5}
+    .latency-track{
+      flex:1;height:32px;background:rgba(57,72,165,0.08);
+      border-radius:999px;position:relative;overflow:hidden;
+    }
+    .latency-fill{
+      height:100%;border-radius:999px;
+      display:flex;align-items:center;padding-left:16px;
+      font-size:11px;font-weight:600;color:#fff;
+      transition:width 1s ease;
+    }
+    .latency-fill.cloud{background:#B0BEC5;width:85%}
+    .latency-fill.ondevice{background:#3948A5;width:3%}
+    .latency-note{font-size:12px;color:#3948A5;opacity:0.6;margin-top:12px}
+    @media(max-width:640px){
+      .latency-wrap{padding:32px 24px}
+      .latency-row{flex-wrap:wrap;gap:8px}
+    }
+
+    /* ── FAQ ── */
+    .faq-card{padding:60px 55px}
+    .faq-list{max-width:700px;margin:28px auto 0}
+    .faq-item{border-bottom:1px solid rgba(57,72,165,0.2)}
+    .faq-item:last-child{border-bottom:none}
+    .faq-q{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:20px 0;cursor:pointer;user-select:none;
+      font-size:15px;font-weight:500;color:#3948A5;
+      transition:opacity 0.2s;
+    }
+    .faq-q:hover{opacity:0.7}
+    .faq-icon{font-size:20px;transition:transform 0.3s;line-height:1}
+    .faq-item.open .faq-icon{transform:rotate(45deg)}
+    .faq-a{
+      max-height:0;overflow:hidden;
+      transition:max-height 0.35s ease,opacity 0.35s ease;opacity:0;
+    }
+    .faq-item.open .faq-a{
+      max-height:300px;opacity:1;padding-bottom:20px;
+    }
+    .faq-a p{font-size:14px;line-height:170%;color:#3948A5;opacity:0.8}
+    @media(max-width:640px){.faq-card{padding:32px 24px}}
+
+    /* ── ROADMAP ── */
+    .roadmap-card{padding:60px 55px}
+    .roadmap-timeline{position:relative;max-width:700px;margin:32px auto 0;padding-left:40px}
+    .roadmap-timeline::before{
+      content:'';position:absolute;left:14px;top:8px;bottom:8px;
+      width:2px;background:rgba(57,72,165,0.25);
+    }
+    .rm-item{position:relative;margin-bottom:36px}
+    .rm-item:last-child{margin-bottom:0}
+    .rm-dot{
+      position:absolute;left:-40px;top:4px;
+      width:16px;height:16px;border-radius:50%;
+      border:2px solid #3948A5;background:#FBF8EF;
+    }
+    .rm-item.done .rm-dot{background:#3948A5}
+    .rm-item.now .rm-dot{background:#3948A5;box-shadow:0 0 0 6px rgba(57,72,165,0.15)}
+    .rm-tag{
+      display:inline-block;padding:2px 10px;border-radius:999px;
+      font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+      margin-bottom:6px;
+    }
+    .rm-tag.done{background:#E8F5E9;color:#2E7D32}
+    .rm-tag.now{background:#3948A5;color:#FBF8EF}
+    .rm-tag.next{background:#FFF3E0;color:#E65100}
+    .rm-item h4{font-size:15px;font-weight:600;color:#3948A5;margin-bottom:4px}
+    .rm-item p{font-size:13px;color:#3948A5;opacity:0.7;line-height:1.5}
+    @media(max-width:640px){.roadmap-card{padding:32px 24px}}
+
+    /* ── FREE FOREVER ── */
+    .free-card{text-align:center;padding:60px 55px}
+    .free-card .big-zero{
+      font-size:80px;font-weight:700;color:#3948A5;line-height:1;
+      letter-spacing:-0.03em;
+    }
+    .free-card .zero-sub{
+      font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+      color:#3948A5;opacity:0.5;margin-top:4px;
+    }
+    .free-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:40px;border-top:1.5px solid #3948A5}
+    .free-cell{padding:28px 20px;border-right:1.5px solid #3948A5}
+    .free-cell:last-child{border-right:none}
+    .free-cell h4{font-size:13px;font-weight:600;color:#3948A5;margin-bottom:6px}
+    .free-cell p{font-size:12px;color:#3948A5;opacity:0.7;line-height:1.5}
+    @media(max-width:768px){
+      .free-grid{grid-template-columns:1fr}
+      .free-cell{border-right:none;border-bottom:1.5px solid #3948A5}
+      .free-cell:last-child{border-bottom:none}
+    }
+    @media(max-width:640px){.free-card{padding:32px 24px}}
+
+    /* ── OPEN SOURCE ── */
+    .oss-card{text-align:center;padding:60px 55px;background:#3948A5;border-color:#3948A5}
+    .oss-card *{color:#FBF8EF}
+    .oss-card .oss-gh-link{
+      display:inline-flex;align-items:center;gap:10px;
+      margin-top:24px;padding:0 32px;height:44px;
+      border:1.5px solid #FBF8EF;border-radius:999px;
+      text-decoration:none;font-size:13px;font-weight:500;
+      letter-spacing:0.06em;transition:background 0.25s;
+    }
+    .oss-card .oss-gh-link:hover{background:rgba(251,248,239,0.15)}
+    .oss-card .oss-mit{
+      font-size:12px;opacity:0.6;margin-top:12px;letter-spacing:0.04em;
+    }
+    @media(max-width:640px){.oss-card{padding:32px 24px}}
+
+    /* ── COMPATIBILITY ── */
+    .compat-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:24px}
+    .compat-chip{
+      display:flex;align-items:center;gap:8px;
+      height:44px;padding:0 24px;
+      border:1.5px solid #3948A5;border-radius:12px;
+      font-size:13px;font-weight:500;color:#3948A5;
+      transition:transform 0.3s,background 0.3s;
+    }
+    .compat-chip:hover{transform:translateY(-2px);background:rgba(57,72,165,0.04)}
+    .compat-chip svg{width:16px;height:16px;flex-shrink:0}
+
+    /* ── SLIM CARD ── */
     .slim-card{
       background:#FBF8EF;border:1.5px solid #3948A5;border-radius:34px;
       padding:60px 55px;margin-bottom:48px;
@@ -178,6 +419,7 @@
       font-size:16px;line-height:170%;max-width:540px;color:#3948A5;
     }
 
+    /* ── FOOTER ── */
     .footer-card{
       background:#FBF8EF;border:1.5px solid #3948A5;border-radius:34px;
       padding:40px 55px;margin-bottom:0;
@@ -193,7 +435,6 @@
       color:#3948A5;text-decoration:none;transition:opacity 0.25s;
     }
     .footer-links a:hover{opacity:0.7}
-
     @media(max-width:768px){
       .slim-card{padding:32px 24px}
       .slim-card h2{font-size:32px}
@@ -222,9 +463,8 @@
           <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="#3948A5"/>
         </svg>
       </nav>
-      <button class="hero-btn">LET'S SOCIALIZE</button>
+      <button class="hero-btn pulse">LET'S SOCIALIZE</button>
     </div>
-
     <div class="hero-body">
       <div class="hero-left">
         <div class="hero-left-top">
@@ -258,7 +498,46 @@
     </div>
   </section>
 
-  <!-- ═══ SERVICES ═══ -->
+  <!-- ═══ PRIVACY BADGES ═══ -->
+  <section class="card fade-up">
+    <div class="badge-strip">
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        No Internet Permission
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        No Account Required
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Zero Telemetry
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Open Source (MIT)
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        No Ads
+      </span>
+    </div>
+  </section>
+
+  <!-- ═══ STATS COUNTERS ═══ -->
+  <section class="card fade-up">
+    <div style="padding:40px 55px 0">
+      <div class="label" style="text-align:center">✦ Performance</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-num" data-target="15">0</div><div class="stat-label">Tokens / Second</div></div>
+      <div class="stat-cell"><div class="stat-num" data-target="866">0</div><div class="stat-label">RAM Usage (MB)</div></div>
+      <div class="stat-cell"><div class="stat-num" data-target="469">0</div><div class="stat-label">Model Size (MB)</div></div>
+      <div class="stat-cell"><div class="stat-num" data-target="507">0</div><div class="stat-label">APK Size (MB)</div></div>
+    </div>
+  </section>
+
+  <!-- ═══ SERVICES + ACCORDION ═══ -->
   <section class="card services fade-up">
     <div class="services-header">
       <div class="services-brand">Footprints</div>
@@ -269,31 +548,237 @@
         <a href="#">Contact</a>
       </nav>
     </div>
-
     <div class="services-body">
       <div class="services-left">
-        <div class="services-label">✦ Our Mission</div>
+        <div class="label">✦ Our Mission</div>
         <h2>AI that respects your privacy by architecture, not by policy.</h2>
         <p>Every component runs locally — from the UI to the inference engine. No data leaves your phone. No servers involved. Just you and a 500M-parameter model.</p>
       </div>
       <div class="services-right">
-        <svg class="star" viewBox="0 0 100 100" fill="none">
-          <polygon points="50,5 61,38 96,38 68,59 79,93 50,72 21,93 32,59 4,38 39,38" stroke="#3948A5" stroke-width="1.5" fill="#FBF8EF"/>
-        </svg>
-
         <div class="accordion">
-          <div class="acc-item"><span>(01) The App — Chat Interface</span><span class="plus">+</span></div>
-          <div class="acc-item"><span>(02) The Engine — llama.cpp</span><span class="plus">+</span></div>
-          <div class="acc-item"><span>(03) The Model — Qwen 2.5 0.5B</span><span class="plus">+</span></div>
-          <div class="acc-item"><span>Capabilities Offered</span><span class="plus">+</span></div>
+          <div class="acc-item open">
+            <div class="acc-header"><span>(01) The App — Chat Interface</span><span class="acc-icon">+</span></div>
+            <div class="acc-body"><p>Built with Jetpack Compose and Material 3. Real-time token streaming, markdown rendering, dark/light theme, voice input, and conversation history management. All UI runs on the UI thread with StateFlow-driven reactive state.</p></div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header"><span>(02) The Engine — llama.cpp</span><span class="acc-icon">+</span></div>
+            <div class="acc-body"><p>C++ inference engine wrapped via the llama.cpp Android SDK (v0.0.4). Handles model loading, token generation, and system prompt management. Exposes a Flow&lt;String&gt; API for real-time token-by-token streaming to the ViewModel.</p></div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header"><span>(03) The Model — Qwen 2.5 0.5B</span><span class="acc-icon">+</span></div>
+            <div class="acc-body"><p>494M-parameter instruction-tuned transformer from Alibaba Cloud. Quantized to Q4_K_M (469 MB). Supports 32K context window. Ships inside the APK — no download required. Strongest 0.5B model on MT-Bench (4.82).</p></div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header"><span>Capabilities Offered</span><span class="acc-icon">+</span></div>
+            <div class="acc-body"><p>General chat, coding help, writing assistance, brainstorming, summarization, translation (English/Chinese). System prompt presets let you switch between Default, Creative, Professional, Concise, or Custom personalities.</p></div>
+          </div>
         </div>
-
-        <button class="book-btn">GET THE APP</button>
+        <button class="book-btn" style="align-self:flex-end;margin-top:auto;width:170px;height:42px;border-radius:999px;border:1.5px solid #3948A5;background:transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;cursor:pointer;transition:background 0.25s,color 0.25s" onmouseover="this.style.background='#3948A5';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#3948A5'">GET THE APP</button>
       </div>
     </div>
   </section>
 
-  <!-- ═══ CASE STUDIES ═══ -->
+  <!-- ═══ EDGE AI MANIFESTO ═══ -->
+  <section class="card manifesto-card fade-up">
+    <div class="quote-mark">"</div>
+    <blockquote>The most private AI is the one that never leaves your pocket. No cloud, no server, no subscription — just intelligence that belongs to you.</blockquote>
+    <div class="attribution">— Footprints · Edge AI Philosophy</div>
+  </section>
+
+  <!-- ═══ ARCHITECTURE ═══ -->
+  <section class="card arch-card fade-up">
+    <div class="label" style="text-align:center">✦ System Architecture</div>
+    <h2 style="font-size:32px;font-weight:500;color:#3948A5;text-align:center">Stack Overview</h2>
+    <div class="arch-grid">
+      <div class="arch-layer"><div class="arch-dot"></div><span>Compose UI</span><span>Jetpack Compose + Material 3 · StateFlow reactive rendering</span></div>
+      <div style="text-align:center;padding:2px 0"><span class="arrow-down">↓</span></div>
+      <div class="arch-layer"><div class="arch-dot"></div><span>ViewModel</span><span>ChatViewModel · sendMessage, export, voice, history, settings</span></div>
+      <div style="text-align:center;padding:2px 0"><span class="arrow-down">↓</span></div>
+      <div class="arch-layer"><div class="arch-dot"></div><span>LlmEngine</span><span>Singleton wrapper · model loading, system prompt, token streaming</span></div>
+      <div style="text-align:center;padding:2px 0"><span class="arrow-down">↓</span></div>
+      <div class="arch-layer"><div class="arch-dot"></div><span>JNI Bridge</span><span>Kotlin/Native → C++ via llama.cpp Android SDK</span></div>
+      <div style="text-align:center;padding:2px 0"><span class="arrow-down">↓</span></div>
+      <div class="arch-layer"><div class="arch-dot"></div><span>llama.cpp</span><span>C++ inference · Q4_K_M quantization · CPU-only (universal)</span></div>
+      <div style="text-align:center;padding:2px 0"><span class="arrow-down">↓</span></div>
+      <div class="arch-layer"><div class="arch-dot"></div><span>ARM CPU</span><span>arm64-v8a · no GPU needed · runs on any Android 11+ device</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ TECHNICAL SPECS ═══ -->
+  <section class="card fade-up" style="padding:60px 55px">
+    <div class="label" style="text-align:center">✦ Technical Specifications</div>
+    <div class="specs-grid">
+      <div class="spec-row"><div class="spec-cell">Model</div><div class="spec-cell">Qwen 2.5 0.5B Instruct</div></div>
+      <div class="spec-row"><div class="spec-cell">Parameters</div><div class="spec-cell">494M</div></div>
+      <div class="spec-row"><div class="spec-cell">Quantization</div><div class="spec-cell">Q4_K_M (4-bit)</div></div>
+      <div class="spec-row"><div class="spec-cell">Context Length</div><div class="spec-cell">32,768 tokens</div></div>
+      <div class="spec-row"><div class="spec-cell">Inference Speed</div><div class="spec-cell">10–15 tok/s (ARM CPU)</div></div>
+      <div class="spec-row"><div class="spec-cell">Min Android</div><div class="spec-cell">11 (API 30)</div></div>
+      <div class="spec-row"><div class="spec-cell">Target SDK</div><div class="spec-cell">36 (Android 14)</div></div>
+      <div class="spec-row"><div class="spec-cell">ABI Support</div><div class="spec-cell">arm64-v8a, x86_64</div></div>
+      <div class="spec-row"><div class="spec-cell">Engine</div><div class="spec-cell">llama.cpp v0.0.4 (Android SDK)</div></div>
+      <div class="spec-row"><div class="spec-cell">UI Framework</div><div class="spec-cell">Jetpack Compose + Material 3</div></div>
+      <div class="spec-row"><div class="spec-cell">Persistence</div><div class="spec-cell">kotlinx-serialization JSON (internal storage)</div></div>
+      <div class="spec-row"><div class="spec-cell">License</div><div class="spec-cell">MIT</div></div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURE COMPARISON ═══ -->
+  <section class="card fade-up" style="padding:60px 55px">
+    <div class="label" style="text-align:center">✦ Feature Comparison</div>
+    <h2 style="font-size:32px;font-weight:500;color:#3948A5;text-align:center;margin-bottom:24px">Footprints vs The World</h2>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <tr><th>Feature</th><th>Footprints</th><th>ChatGPT</th><th>LlamaChat</th><th>Ollama Mobile</th></tr>
+        <tr><td>100% Offline</td><td class="yes">✅</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+        <tr><td>No Account</td><td class="yes">✅</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+        <tr><td>Zero Telemetry</td><td class="yes">✅</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td></tr>
+        <tr><td>Open Source</td><td class="yes">✅ (MIT)</td><td class="no">❌</td><td class="no">❌</td><td class="yes">✅</td></tr>
+        <tr><td>Token Streaming</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+        <tr><td>Chat History</td><td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td><td class="no">❌</td></tr>
+        <tr><td>Export Chat</td><td class="yes">✅</td><td class="yes">✅</td><td class="no">❌</td><td class="no">❌</td></tr>
+        <tr><td>Voice Input</td><td class="yes">✅</td><td class="yes">✅</td><td class="no">❌</td><td class="no">❌</td></tr>
+        <tr><td>Dark / Light Theme</td><td class="yes">✅</td><td class="yes">✅</td><td class="no">❌</td><td class="no">❌</td></tr>
+        <tr><td>Free Forever</td><td class="yes">✅</td><td class="no">❌</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+        <tr><td>On-Device Model</td><td><span class="chip green">0.5B</span></td><td><span class="chip red">Cloud</span></td><td><span class="chip green">Any GGUF</span></td><td><span class="chip green">Any GGUF</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ LATENCY COMPARISON ═══ -->
+  <section class="card fade-up">
+    <div class="latency-wrap">
+      <div class="label" style="text-align:center">✦ Latency Comparison</div>
+      <h2 style="font-size:32px;font-weight:500;color:#3948A5;text-align:center">On-Device vs Cloud</h2>
+      <div class="latency-bars">
+        <div class="latency-row">
+          <div class="latency-label">Cloud AI</div>
+          <div class="latency-track"><div class="latency-fill cloud" style="width:85%">300–1500ms round-trip</div></div>
+        </div>
+        <div class="latency-row">
+          <div class="latency-label">Footprints</div>
+          <div class="latency-track"><div class="latency-fill ondevice" style="width:3%">0ms network latency</div></div>
+        </div>
+      </div>
+      <div class="latency-note">Cloud inference adds network overhead, queueing, and server processing. On-device inference starts generating immediately — no round-trip, no queue, no data transmission.</div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="card faq-card fade-up">
+    <div class="label" style="text-align:center">✦ Frequently Asked Questions</div>
+    <h2 style="font-size:32px;font-weight:500;color:#3948A5;text-align:center">Common Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-q"><span>Why a 0.5B model? Why not 7B or 13B?</span><span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Larger models (7B+) require 4–8GB RAM just for weights and run at 2–5 tok/s on phones — too slow for real-time chat. The 0.5B fits in ~500MB, runs 10–15 tok/s, and delivers surprisingly capable responses for its size. It's the smallest viable model for fluid conversation on mobile hardware.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Is it really 100% offline? No internet needed?</span><span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Yes. The app does not declare the INTERNET permission. It cannot make network calls. The model ships inside the APK. Everything — from the UI to the inference engine — runs locally on your device. No server, no cloud, no data transmission.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Can I use my own model instead of Qwen?</span><span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Not yet — but multi-model support is planned for v1.2. You'll be able to swap between Qwen, Llama, Phi, and other GGUF models at runtime. For now, Qwen 2.5 0.5B is the bundled default optimized for this app.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Why no GPU acceleration?</span><span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>llama.cpp CPU inference works on every Android device. GPU (Vulkan/OpenCL) support varies wildly across OEM drivers — what works on a Pixel may crash on a Xiaomi. CPU is universal, stable, and fast enough for a 0.5B model at 10–15 tok/s.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>How is my data stored? Can other apps read it?</span><span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Conversations are saved as JSON files in app-internal storage (filesDir/conversations/). This directory is sandboxed per Android security model — no other app can access it without root permissions. No data is ever uploaded anywhere.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ROADMAP ═══ -->
+  <section class="card roadmap-card fade-up">
+    <div class="label" style="text-align:center">✦ Roadmap</div>
+    <h2 style="font-size:32px;font-weight:500;color:#3948A5;text-align:center">What's Next</h2>
+    <div class="roadmap-timeline">
+      <div class="rm-item done">
+        <div class="rm-dot"></div>
+        <span class="rm-tag done">v1.0 · Shipped</span>
+        <h4>Core Chat + All Current Features</h4>
+        <p>Token streaming, chat history, export, voice input, markdown, dark mode, system presets, conversation management, CI/CD releases.</p>
+      </div>
+      <div class="rm-item now">
+        <div class="rm-dot"></div>
+        <span class="rm-tag now">v1.1 · Building</span>
+        <h4>RAG + Model Switching + Search</h4>
+        <p>In-app model download (choose between 0.5B / 1.5B / 3B), Retrieval-Augmented Generation for document chat, full-text search in history, custom prompt editor.</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot"></div>
+        <span class="rm-tag next">v1.2 · Planned</span>
+        <h4>TTS + Multimodal + i18n</h4>
+        <p>Streaming text-to-speech for AI responses, image understanding (multimodal Qwen), localization for Hindi, Gujarati, Spanish, and more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FREE FOREVER ═══ -->
+  <section class="card free-card fade-up">
+    <div class="big-zero">$0</div>
+    <div class="zero-sub">Free Forever · No Subscription</div>
+    <div class="free-grid">
+      <div class="free-cell">
+        <h4>No Monthly Fee</h4>
+        <p>Pay once for your phone. The model is included. No API credits, no tokens to buy, no usage limits.</p>
+      </div>
+      <div class="free-cell">
+        <h4>No Data Mining</h4>
+        <p>Your conversations aren't the product. There are no ads, no analytics, no user profiling — by architecture.</p>
+      </div>
+      <div class="free-cell">
+        <h4>No Lock-In</h4>
+        <p>Export your chats anytime. MIT license means you can fork, modify, and redistribute freely. You own your stack.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ COMPATIBILITY ═══ -->
+  <section class="card fade-up" style="padding:60px 55px;text-align:center">
+    <div class="label">✦ Compatibility</div>
+    <h2 style="font-size:32px;font-weight:500;color:#3948A5">Runs on Any Android 11+ Device</h2>
+    <div class="compat-grid">
+      <span class="compat-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+        Android 11+
+      </span>
+      <span class="compat-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-4a2 2 0 0 1-2-2V3"/><path d="M17 21h2a2 2 0 0 0 2-2V9l-5-5H7a2 2 0 0 0-2 2v2"/><path d="M9 13v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"/><path d="M9 17h6"/></svg>
+        ARM64 / x86_64
+      </span>
+      <span class="compat-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        1GB Free Storage
+      </span>
+      <span class="compat-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        500MB+ RAM
+      </span>
+      <span class="compat-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Processor: Any ARM Cortex
+      </span>
+    </div>
+    <p style="font-size:12px;color:#3948A5;opacity:0.5;margin-top:24px">Tested on moto g57 power · Verified on Snapdragon 8 Gen 2/3, Dimensity, Exynos</p>
+  </section>
+
+  <!-- ═══ OPEN SOURCE ═══ -->
+  <section class="card oss-card fade-up">
+    <h2 style="font-size:32px;font-weight:500;margin-bottom:12px">Open Source · MIT Licensed</h2>
+    <p style="font-size:15px;line-height:170%;max-width:500px;margin:0 auto;opacity:0.9">Built for the community. Fork it, modify it, ship it. The only rule: keep it private.</p>
+    <a href="https://github.com/rajumark/Footprints" target="_blank" class="oss-gh-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      View on GitHub
+    </a>
+    <div class="oss-mit">MIT License — Use it, fork it, ship it</div>
+  </section>
+
+  <!-- ═══ CASE STUDY ═══ -->
   <section class="slim-card fade-up">
     <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;opacity:0.7;margin-bottom:8px">✦ Case Study</div>
     <h2>Built for the Edge AI era.</h2>
@@ -337,11 +822,52 @@
 </div>
 
 <script>
+  // IntersectionObserver for scroll-in animations
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   setTimeout(() => document.querySelector('.fade-up')?.classList.add('visible'), 100);
+
+  // Animated counters
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        let current = 0;
+        const step = Math.ceil(target / 40);
+        const timer = setInterval(() => {
+          current += step;
+          if(current >= target){ current = target; clearInterval(timer) }
+          el.textContent = current;
+        }, 30);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => counterObserver.observe(el));
+
+  // Accordion toggle
+  document.querySelectorAll('.acc-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const wasOpen = item.classList.contains('open');
+      // close all siblings
+      item.parentElement.querySelectorAll('.acc-item').forEach(sib => sib.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // FAQ toggle
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      item.parentElement.querySelectorAll('.faq-item').forEach(sib => sib.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
 </script>
 
 </body>
