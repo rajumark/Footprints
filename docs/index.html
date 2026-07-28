@@ -29,7 +29,7 @@
     }
 
     /* ── HERO ── */
-    .hero{height:780px;display:flex;flex-direction:column;position:relative}
+    .hero{height:calc(100vh - 120px);display:flex;flex-direction:column;position:relative}
     .hero-header{
       display:flex;align-items:center;justify-content:space-between;
       padding:32px 40px 0;flex-shrink:0;
@@ -54,7 +54,7 @@
 
     .hero-body{display:flex;flex:1;min-height:0}
     .hero-left{flex:0 0 50%;display:flex;flex-direction:column;justify-content:space-between;padding:0 0 0 55px;position:relative}
-    .hero-left-top{padding-top:150px}
+    .hero-left-top{padding-top:40px}
     .hero-left-top h2{
       font-size:42px;font-weight:500;max-width:520px;line-height:1.2;
       color:#3948A5;
@@ -228,28 +228,31 @@
     <div class="hero-body">
       <div class="hero-left">
         <div class="hero-left-top">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+            <img src="../assets/elephant.png" alt="Footprints" style="width:40px;height:40px">
+            <span style="font-size:24px;font-weight:500;letter-spacing:-0.02em">Footprints</span>
+          </div>
           <h2>Private AI that lives on your phone — entirely offline.</h2>
           <p>Footprints runs Qwen 2.5 0.5B on-device via llama.cpp. No cloud, no account, no tracking. Your conversations never leave your Android device.</p>
+          <div style="display:flex;gap:14px;margin-top:32px;flex-wrap:wrap">
+            <a href="https://github.com/rajumark/Footprints/releases" target="_blank" class="hero-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 24px;font-size:13px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download APK
+            </a>
+            <a href="https://github.com/rajumark/Footprints" target="_blank" class="hero-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 24px;font-size:13px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub
+            </a>
+          </div>
         </div>
         <div class="hero-left-bottom">Footprints</div>
       </div>
       <div class="hero-right">
-        <svg viewBox="0 0 400 500" style="width:100%;height:100%;background:#3948A5">
-          <defs>
-            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <circle cx="2" cy="2" r="1" fill="#FBF8EF" opacity="0.15"/>
-            </pattern>
-          </defs>
-          <rect width="400" height="500" fill="url(#grid)"/>
-          <rect x="140" y="100" width="120" height="240" rx="16" fill="#FBF8EF" opacity="0.12" stroke="#FBF8EF" stroke-width="0.5"/>
-          <rect x="148" y="110" width="104" height="12" rx="3" fill="#FBF8EF" opacity="0.08"/>
-          <rect x="148" y="130" width="80" height="6" rx="2" fill="#FBF8EF" opacity="0.06"/>
-          <rect x="148" y="144" width="60" height="6" rx="2" fill="#FBF8EF" opacity="0.06"/>
-          <rect x="170" y="166" width="82" height="6" rx="2" fill="#FBF8EF" opacity="0.08"/>
-          <rect x="148" y="180" width="70" height="6" rx="2" fill="#FBF8EF" opacity="0.06"/>
-          <text x="200" y="420" text-anchor="middle" fill="#FBF8EF" font-size="11" font-family="Inter" opacity="0.4" letter-spacing="2">Qwen 2.5 0.5B</text>
-          <text x="200" y="440" text-anchor="middle" fill="#FBF8EF" font-size="9" font-family="Inter" opacity="0.25" letter-spacing="3">100% OFFLINE</text>
-        </svg>
+        <div style="display:flex;align-items:flex-start;justify-content:center;width:100%;height:100%;background:#3948A5;padding-top:30px">
+          <video autoplay loop muted playsinline style="max-width:100%;max-height:calc(100% - 30px);width:auto;height:calc(100% - 30px);display:block;border-radius:12px" poster="../screenshots_video/screenshot1.png">
+            <source src="../screenshots_video/demovideo.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="hero-cta">Let's Chat ↗</div>
       </div>
     </div>
@@ -295,6 +298,22 @@
     <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;opacity:0.7;margin-bottom:8px">✦ Case Study</div>
     <h2>Built for the Edge AI era.</h2>
     <p>Footprints combines Jetpack Compose, llama.cpp, and Qwen 2.5 0.5B into a single APK. The model ships with the app — no downloads, no setup, no internet required.</p>
+  </section>
+
+  <!-- ═══ SHOWCASE ═══ -->
+  <section class="slim-card fade-up" style="text-align:center">
+    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;opacity:0.7;margin-bottom:16px">✦ Showcase</div>
+    <div style="display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start">
+      <div style="flex:0 0 auto">
+        <img src="../screenshots_video/screenshot1.png" alt="Footprints Screenshot" style="width:260px;border-radius:20px;border:1.5px solid #3948A5;display:block">
+      </div>
+      <div style="flex:0 0 auto">
+        <video controls style="width:260px;border-radius:20px;border:1.5px solid #3948A5;display:block" poster="../screenshots_video/screenshot1.png">
+          <source src="../screenshots_video/demovideo.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+    <p style="max-width:none;margin-top:24px;color:#3948A5;opacity:0.75;font-size:14px">Screenshot and demo of Footprints running on device.</p>
   </section>
 
   <!-- ═══ ABOUT ═══ -->

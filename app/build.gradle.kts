@@ -67,6 +67,7 @@ dependencies {
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.material.icons.core)
   // Tooling
   debugImplementation(libs.androidx.compose.ui.tooling)
   // Instrumented tests
@@ -90,4 +91,7 @@ dependencies {
 
   // LLM Inference
   implementation(libs.llama.cpp.android)
+
+  // Serialization
+  implementation(libs.kotlinx.serialization.json)
 }

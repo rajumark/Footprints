@@ -54,31 +54,14 @@ Every step you take in the digital world leaves a **footprint**. Your data, your
 
 ## 📱 App Preview
 
-```
-┌─────────────────────────────┐
-│  🔵 Footprints           ✓  │
-│  Qwen 2.5 0.5B • Ready     │
-├─────────────────────────────┤
-│                             │
-│  ┌─────────────────────┐    │
-│  │ Hello! I'm          │    │
-│  │ Footprints. How can │    │
-│  │ I help you today?   │ ◄──│ Assistant message
-│  └─────────────────────┘    │
-│                             │
-│              ┌──────────┐   │
-│              │ What is  │   │
-│              │ gravity? │──►│ User message
-│              └──────────┘   │
-│                             │
-│  ┌─────────────────────┐    │
-│  │ ⏳ Thinking...      │ ◄──│ Streaming response
-│  └─────────────────────┘    │
-│                             │
-├─────────────────────────────┤
-│ 📝 Type a message...    ➤   │
-└─────────────────────────────┘
-```
+<div align="center">
+  <img src="screenshots_video/screenshot1.png" alt="Footprints Chat" width="280"/>
+  <br/><br/>
+  <video src="screenshots_video/demovideo.mp4" controls width="280" poster="screenshots_video/screenshot1.png">
+    Your browser does not support the video tag.
+  </video>
+  <br/><br/>
+</div>
 
 ---
 
@@ -160,11 +143,14 @@ Every push to `main` with `#go` in the commit message triggers GitHub Actions to
 - [x] Basic chat with local Qwen 2.5 0.5B
 - [x] 100% offline inference
 - [x] CI/CD with auto-release
-- [ ] Chat history persistence (Room DB)
-- [ ] Token streaming animation
-- [ ] System prompt customization
-- [ ] Export conversation
-- [ ] Dark/light theme toggle
+- [x] Chat history persistence (JSON)
+- [x] Token streaming
+- [x] System prompt customization
+- [x] Export conversation
+- [x] Dark/light theme toggle
+- [x] Markdown rendering
+- [x] Voice input
+- [x] Chat conversation management
 
 ---
 
