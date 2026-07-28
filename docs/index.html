@@ -3,603 +3,836 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Footprints — Private AI for Android</title>
+  <title>Footprints — Private AI That Lives On Your Phone</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Space+Mono&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
   <style>
     /* ── Reset ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background-color: #F3EBDD;
-      color: #202020;
-      font-family: 'IBM Plex Mono', 'Courier Prime', monospace;
-      font-size: 14px;
-      line-height: 1.7;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:#F7F3EC;
+      color:#1D1D1B;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:14px;
+      line-height:1.7;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
     }
 
-    /* ── Paper texture overlay ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      pointer-events: none;
-      opacity: 0.05;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px),
-        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px),
-        radial-gradient(circle at 20% 35%, rgba(139,119,90,0.15) 0, transparent 150px),
-        radial-gradient(circle at 75% 60%, rgba(139,119,90,0.08) 0, transparent 200px),
-        radial-gradient(circle at 40% 80%, rgba(100,80,60,0.06) 0, transparent 120px);
+    /* ── Layered paper background ── */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(200,185,160,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 75%, rgba(200,185,160,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 40%, rgba(200,185,160,0.06) 0%, transparent 50%);
     }
+    body::after{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat:repeat;
+      background-size:200px 200px;
+    }
+    .content{position:relative;z-index:1}
 
     /* ── Container ── */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 40px;
-      position: relative;
-      z-index: 1;
-    }
+    .container{max-width:1400px;margin:0 auto;padding:0 48px}
+    @media(max-width:768px){.container{padding:0 24px}}
 
-    /* ── Zig-zag top border ── */
-    .zigzag {
-      width: 100%;
-      height: 12px;
-      background: repeating-linear-gradient(
-        -45deg,
-        #F3EBDD 0px, #F3EBDD 8px,
-        transparent 8px, transparent 12px,
-        #F3EBDD 12px, #F3EBDD 16px
-      );
-      background-size: 16px 16px;
-      background-color: #B8AB95;
-    }
-    .zigzag + .zigzag {
-      margin-top: 0;
+    /* ── Ruler decoration ── */
+    .ruler{
+      height:8px;
+      background:repeating-linear-gradient(90deg,#1D1D1B 0,#1D1D1B 1px,transparent 1px,transparent 8px);
+      opacity:0.15;margin:0;
     }
 
     /* ── Nav ── */
-    nav {
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #B8AB95;
+    nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:20px 0 16px;border-bottom:1px solid rgba(29,29,27,0.1);
+      position:relative;
     }
-    .nav-brand {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: #202020;
+    .nav-brand{
+      font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+      color:#1D1D1B;
     }
-    .nav-links {
-      display: flex;
-      gap: 24px;
-      list-style: none;
+    .nav-links{display:flex;gap:28px;list-style:none}
+    .nav-links a{
+      font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+      color:#57534E;text-decoration:none;transition:color 0.2s;
     }
-    .nav-links a {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #555;
-      text-decoration: none;
-      transition: color 0.2s;
+    .nav-links a:hover{color:#1D1D1B}
+    .nav-rule{
+      position:absolute;bottom:-1px;right:0;
+      width:60px;height:1px;background:#1D1D1B;
     }
-    .nav-links a:hover { color: #181818; }
+    @media(max-width:768px){.nav-links{display:none}}
 
     /* ── Hero ── */
-    .hero {
-      display: flex;
-      gap: 60px;
-      padding: 60px 0 40px;
-      align-items: center;
+    .hero{display:flex;gap:80px;padding:80px 0 60px;align-items:center;min-height:90vh}
+    .hero-left{flex:0 0 52%}
+    .hero-right{flex:0 0 48%;position:relative}
+    .hero-label{
+      font-size:10px;letter-spacing:2px;text-transform:uppercase;
+      color:#8A6A44;margin-bottom:12px;
     }
-    .hero-left { flex: 0 0 55%; }
-    .hero-right { flex: 0 0 45%; position: relative; }
+    .hero-title{
+      font-size:90px;line-height:0.88;font-weight:600;color:#1D1D1B;
+      letter-spacing:-3px;
+      font-family:'Instrument Serif',Georgia,serif;
+    }
+    .hero-title .thin{font-weight:400;font-style:italic;color:#57534E}
+    .hero-p{
+      margin-top:28px;font-size:14px;color:#57534E;max-width:480px;line-height:1.8;
+    }
+    .hero-p strong{color:#1D1D1B}
 
-    .hero-title {
-      font-family: 'Anton', 'Bebas Neue', sans-serif;
-      font-size: 110px;
-      font-weight: 900;
-      line-height: 0.92;
-      text-transform: uppercase;
-      color: #181818;
-      letter-spacing: -3px;
+    .hero-badges{
+      display:flex;gap:4px 20px;margin-top:20px;flex-wrap:wrap;
     }
-    .hero-title span { display: block; }
-
-    .hero-sub {
-      margin-top: 28px;
-      font-size: 15px;
-      color: #555;
-      line-height: 1.6;
-      max-width: 440px;
+    .hero-badge{
+      display:flex;align-items:center;gap:6px;
+      font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#57534E;
     }
-    .hero-sub strong { color: #202020; font-weight: 600; }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 18px;
-      margin-top: 16px;
-      font-size: 12px;
-      color: #7B756D;
-      font-family: 'Space Mono', monospace;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .hero-tags::before { content: '◆'; color: #6E8B63; margin-right: 4px; }
-
-    /* ── Vintage ribbon button ── */
-    .btn-ribbon {
-      display: inline-block;
-      margin-top: 32px;
-      padding: 14px 40px 14px 36px;
-      background: #181818;
-      color: #F3EBDD;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      text-decoration: none;
-      position: relative;
-      transition: all 0.25s;
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.08);
-    }
-    .btn-ribbon::after {
-      content: '';
-      position: absolute;
-      top: 0; right: -12px;
-      width: 0; height: 0;
-      border-top: 21px solid transparent;
-      border-bottom: 21px solid transparent;
-      border-left: 12px solid #181818;
-    }
-    .btn-ribbon:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0 rgba(0,0,0,0.12);
+    .hero-badge span{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:14px;height:14px;border:1px solid #6A7352;border-radius:50%;
+      font-size:8px;color:#6A7352;
     }
 
-    /* ── Hero right collage ── */
-    .phone-frame {
-      width: 220px;
-      margin: 0 auto;
-      position: relative;
+    .hero-btns{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap}
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:14px 32px;background:#1D1D1B;color:#F7F3EC;
+      font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;
+      text-transform:uppercase;text-decoration:none;
+      transition:all 0.2s;box-shadow:2px 2px 0 rgba(0,0,0,0.08);
+      position:relative;overflow:hidden;
     }
-    .phone-frame svg { display: block; width: 100%; filter: saturate(0.3) contrast(0.9); }
+    .btn-primary::before{
+      content:'';position:absolute;inset:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.03) 2px,rgba(255,255,255,0.03) 3px);
+    }
+    .btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(0,0,0,0.12)}
+    .btn-secondary{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:14px 32px;background:transparent;color:#1D1D1B;
+      font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;
+      text-transform:uppercase;text-decoration:none;
+      border:1px solid rgba(29,29,27,0.2);transition:all 0.2s;
+    }
+    .btn-secondary:hover{border-color:#1D1D1B;background:rgba(29,29,27,0.02)}
 
-    .desk-card {
-      position: absolute;
-      background: #EFE6D5;
-      border: 1px solid #B8AB95;
-      padding: 10px 14px;
-      font-size: 11px;
-      font-family: 'Space Mono', monospace;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 2px 3px 0 rgba(0,0,0,0.06);
-      animation: float 4s ease-in-out infinite;
+    /* ── Drafting table ── */
+    .drafting-table{position:relative;width:100%;height:520px;background:#EFE8DC;border:1px solid rgba(29,29,27,0.08);overflow:hidden}
+    .drafting-table::before{
+      content:'';position:absolute;inset:0;
+      background-image:repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(78,110,129,0.06) 24px,rgba(78,110,129,0.06) 25px),
+        repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(78,110,129,0.06) 24px,rgba(78,110,129,0.06) 25px);
     }
-    .desk-card strong { display: block; font-size: 13px; color: #181818; margin-top: 2px; }
+    .drafting-table .phone-sketch{
+      position:absolute;bottom:40px;left:50%;transform:translateX(-50%);width:100px;
+      filter:sepia(0.3) contrast(0.85);
+    }
+    .dt-note{
+      position:absolute;font-size:8px;letter-spacing:0.5px;color:#57534E;
+      font-family:'IBM Plex Mono',monospace;
+    }
+    .dt-note-1{top:30px;left:24px;writing-mode:vertical-lr;opacity:0.5}
+    .dt-note-2{top:40px;right:24px;text-align:right;opacity:0.5}
+    .dt-label{
+      position:absolute;
+      background:#F7F3EC;border:1px solid rgba(29,29,27,0.12);
+      padding:6px 10px;font-size:8px;letter-spacing:0.5px;color:#57534E;
+      font-family:'IBM Plex Mono',monospace;
+      box-shadow:1px 2px 0 rgba(0,0,0,0.04);
+    }
+    .dt-label-1{top:60px;left:40px;transform:rotate(-2deg)}
+    .dt-label-2{top:90px;left:140px;transform:rotate(1.5deg)}
+    .dt-label-3{bottom:100px;right:50px;transform:rotate(-1deg)}
+    .dt-label-4{bottom:150px;right:160px;transform:rotate(2.5deg)}
 
-    .card-ram       { top: -10px;  right: 0;    transform: rotate(-5deg);  animation-delay: 0s; }
-    .card-model     { top: 70px;   right: -40px; transform: rotate(3deg);   animation-delay: 0.8s; }
-    .card-privacy   { bottom: 30px; right: -20px; transform: rotate(8deg);   animation-delay: 1.6s; background: #59634A; color: #F3EBDD; border-color: #59634A; }
-    .card-offline   { bottom: 80px; left: -50px;  transform: rotate(-7deg);  animation-delay: 2.4s; }
-    .card-bubble    { top: 130px;  left: -60px;   transform: rotate(-3deg);  animation-delay: 0.4s; background: #E6DCC9; }
-    .card-floppy    { bottom: -20px; left: -30px; transform: rotate(12deg);  animation-delay: 1.2s; padding: 8px; font-size: 20px; }
-    .card-notebook  { top: -20px;  left: -30px;   transform: rotate(-8deg);  animation-delay: 2s; padding: 8px; font-size: 18px; }
+    .dt-line{
+      position:absolute;border-top:1px dashed rgba(78,110,129,0.25);
+      transform-origin:0 0;
+    }
+    .dt-line-1{width:80px;top:76px;left:116px;transform:rotate(-5deg)}
+    .dt-line-2{width:60px;bottom:118px;right:68px;transform:rotate(8deg)}
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-      50%      { transform: translateY(-4px) rotate(var(--r, 0deg)); }
+    .dt-chip{
+      position:absolute;width:6px;height:6px;
+      background:#4E6E81;border-radius:50%;opacity:0.3;
     }
-    .desk-card           { --r: 0deg; }
-    .card-ram     { --r: -5deg; }
-    .card-model   { --r: 3deg; }
-    .card-privacy { --r: 8deg; }
-    .card-offline { --r: -7deg; }
-    .card-bubble  { --r: -3deg; }
-    .card-floppy  { --r: 12deg; }
-    .card-notebook{ --r: -8deg; }
+    .dt-chip-1{top:74px;left:114px}
+    .dt-chip-2{bottom:116px;right:66px}
 
-    /* ── Section title ── */
-    .section-title {
-      font-family: 'Anton', 'Bebas Neue', sans-serif;
-      font-size: 36px;
-      text-transform: uppercase;
-      color: #181818;
-      letter-spacing: 2px;
-      margin-bottom: 40px;
-      position: relative;
-      display: inline-block;
-    }
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: repeating-linear-gradient(90deg, #181818 0, #181818 6px, transparent 6px, transparent 10px);
-    }
-
-    /* ── Features ── */
-    .features {
-      padding: 60px 0;
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 30px;
-    }
-    .feature-card {
-      background: #EFE6D5;
-      border: 1px solid #B8AB95;
-      padding: 32px 24px 24px;
-      position: relative;
-      transform: rotate(var(--r, 0deg));
-      transition: transform 0.3s;
-    }
-    .feature-card:hover { transform: rotate(0deg); }
-    .feature-card:nth-child(1) { --r: -1.5deg; }
-    .feature-card:nth-child(2) { --r: 1deg; }
-    .feature-card:nth-child(3) { --r: -0.5deg; }
-    .feature-card:nth-child(4) { --r: 2deg; }
-
-    .pin {
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 18px; height: 18px;
-      background: radial-gradient(circle at 35% 35%, #aaa, #666);
-      border-radius: 50%;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.2);
-    }
-    .pin::after {
-      content: '';
-      position: absolute;
-      top: 4px; left: 6px;
-      width: 6px; height: 6px;
-      background: rgba(255,255,255,0.3);
-      border-radius: 50%;
+    .dt-stamp{
+      position:absolute;bottom:60px;right:30px;
+      font-size:7px;letter-spacing:2px;text-transform:uppercase;
+      color:#8A6A44;opacity:0.3;transform:rotate(-12deg);
+      border:1px solid #8A6A44;padding:4px 8px;
     }
 
-    .feature-card h3 {
-      font-family: 'Anton', sans-serif;
-      font-size: 20px;
-      text-transform: uppercase;
-      color: #181818;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
+    .dt-measure{
+      position:absolute;left:24px;bottom:24px;
+      width:60px;height:1px;background:rgba(29,29,27,0.15);
     }
-    .feature-card p {
-      font-size: 12px;
-      color: #555;
-      line-height: 1.6;
+    .dt-measure::before{content:'|';position:absolute;left:0;top:-4px;color:rgba(29,29,27,0.15);font-size:8px}
+    .dt-measure::after{content:'|';position:absolute;right:0;top:-4px;color:rgba(29,29,27,0.15);font-size:8px}
+
+    .dt-arrow{
+      position:absolute;font-size:10px;color:rgba(78,110,129,0.2);
     }
 
-    /* ── Timeline ── */
-    .timeline-section { padding: 60px 0; }
-    .timeline {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
+    /* ── Section ── */
+    section{padding:100px 0;position:relative}
+    .section-number{
+      font-size:10px;letter-spacing:2px;color:#8A6A44;
+      margin-bottom:8px;
     }
-    .timeline-step {
-      text-align: center;
-      position: relative;
-      flex: 1;
+    .section-title{
+      font-size:48px;line-height:1.0;font-weight:400;
+      font-family:'Instrument Serif',Georgia,serif;
+      color:#1D1D1B;margin-bottom:32px;
     }
-    .timeline-step .dot {
-      width: 14px; height: 14px;
-      background: #181818;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      position: relative;
-      z-index: 2;
+    .section-title em{font-style:italic;color:#57534E}
+
+    /* ── Editorial spread (Why) ── */
+    .spread{display:flex;gap:60px;align-items:flex-start}
+    .spread-left{flex:0 0 45%}
+    .spread-right{flex:0 0 55%}
+    .blockquote{
+      font-size:28px;line-height:1.3;font-weight:400;
+      font-family:'Instrument Serif',Georgia,serif;
+      color:#1D1D1B;border-left:2px solid #1D1D1B;padding-left:24px;
+      margin-bottom:24px;
     }
-    .timeline-step .label {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #555;
+    .diagram-cloud{
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+      padding:24px;background:#EFE8DC;border:1px solid rgba(29,29,27,0.06);
+      margin-top:16px;
     }
-    .timeline-line {
-      position: absolute;
-      top: 7px;
-      left: 50%;
-      width: 100%;
-      height: 1px;
-      background: #B8AB95;
-      z-index: 0;
+    .diagram-cloud .node{
+      padding:8px 14px;background:#F7F3EC;border:1px solid rgba(29,29,27,0.1);
+      font-size:9px;letter-spacing:0.5px;color:#57534E;
     }
-    .timeline-step:last-child .timeline-line { display: none; }
-    .timeline-arrow {
-      display: inline-block;
-      margin-top: 6px;
-      color: #6E8B63;
-      font-size: 16px;
+    .diagram-cloud .arrow{font-size:12px;color:#4E6E81;opacity:0.4}
+    .diagram-cloud .strike{text-decoration:line-through;opacity:0.3}
+    .diagram-cloud .node-solid{
+      padding:8px 14px;background:#1D1D1B;color:#F7F3EC;
+      font-size:9px;letter-spacing:0.5px;
     }
 
-    /* ── Screenshot gallery ── */
-    .gallery-section { padding: 60px 0; }
-    .gallery {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      flex-wrap: wrap;
+    /* ── Blueprint (Under the Hood) ── */
+    .blueprint{
+      background:#EFE8DC;border:1px solid rgba(78,110,129,0.12);
+      padding:40px;position:relative;overflow:hidden;
     }
-    .photo {
-      background: #EFE6D5;
-      padding: 10px 10px 28px;
-      border: 1px solid #B8AB95;
-      box-shadow: 3px 4px 0 rgba(0,0,0,0.06);
-      transform: rotate(var(--r, 0deg));
-      max-width: 280px;
+    .blueprint::before{
+      content:'';position:absolute;inset:0;
+      background-image:linear-gradient(90deg,rgba(78,110,129,0.04) 1px,transparent 1px),
+        linear-gradient(0deg,rgba(78,110,129,0.04) 1px,transparent 1px);
+      background-size:20px 20px;
     }
-    .photo:nth-child(1) { --r: -3deg; }
-    .photo:nth-child(2) { --r: 1.5deg; }
-    .photo:nth-child(3) { --r: -1deg; }
+    .bp-title{
+      font-size:10px;letter-spacing:2px;text-transform:uppercase;
+      color:#4E6E81;margin-bottom:24px;position:relative;z-index:1;
+    }
+    .bp-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+    .bp-node{
+      padding:12px 16px;background:#F7F3EC;border:1px solid rgba(78,110,129,0.15);
+      font-size:9px;letter-spacing:0.5px;color:#1D1D1B;text-align:center;
+      transition:all 0.3s;cursor:default;min-width:80px;
+    }
+    .bp-node:hover{background:#1D1D1B;color:#F7F3EC;border-color:#1D1D1B}
+    .bp-node .sub{display:block;font-size:7px;color:#57534E;margin-top:2px}
+    .bp-node:hover .sub{color:rgba(247,243,236,0.6)}
+    .bp-arrow{font-size:10px;color:#4E6E81;opacity:0.3}
+    .bp-note{
+      position:absolute;bottom:12px;right:16px;
+      font-size:7px;color:#57534E;opacity:0.4;
+      font-style:italic;
+    }
 
-    .photo .tape {
-      width: 40px; height: 20px;
-      background: rgba(239,230,213,0.7);
-      border: 1px solid #B8AB95;
-      position: absolute;
+    /* ── Museum card ── */
+    .museum{display:flex;gap:60px;align-items:center}
+    .museum-left{flex:0 0 45%}
+    .museum-right{flex:0 0 55%}
+    .spec-card{
+      background:#EFE8DC;border:1px solid rgba(29,29,27,0.08);
+      padding:32px;position:relative;
     }
-    .photo-box {
-      width: 100%;
-      height: 200px;
-      background: #E6DCC9;
-      border: 1px solid #B8AB95;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: #7B756D;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      position: relative;
+    .spec-card::after{
+      content:'SPEC-001';position:absolute;top:8px;right:12px;
+      font-size:7px;color:#57534E;opacity:0.3;
+      letter-spacing:1px;
     }
+    .spec-title{
+      font-family:'Instrument Serif',Georgia,serif;
+      font-size:22px;color:#1D1D1B;margin-bottom:20px;
+    }
+    .spec-table{width:100%}
+    .spec-table tr{border-bottom:1px solid rgba(29,29,27,0.06)}
+    .spec-table td{padding:8px 0;font-size:11px}
+    .spec-table td:first-child{color:#57534E;width:45%}
+    .spec-table td:last-child{color:#1D1D1B;font-weight:500}
+
+    .exploded{
+      width:100%;height:280px;
+      background:#EFE8DC;border:1px solid rgba(78,110,129,0.08);
+      display:flex;align-items:center;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .exploded .part{
+      position:absolute;background:#F7F3EC;border:1px solid rgba(78,110,129,0.15);
+      padding:6px 12px;font-size:7px;letter-spacing:1px;color:#4E6E81;
+      text-transform:uppercase;
+    }
+    .exploded .part-1{top:15%;left:10%;transform:rotate(-3deg)}
+    .exploded .part-2{top:30%;left:25%}
+    .exploded .part-3{top:45%;left:15%;transform:rotate(2deg)}
+    .exploded .part-4{bottom:25%;right:20%}
+    .exploded .part-5{bottom:15%;right:10%;transform:rotate(-2deg)}
+    .exploded-phone{width:60px;height:120px;background:#1D1D1B;border-radius:6px;position:relative;opacity:0.1}
+
+    /* ── Ink flow / message journey ── */
+    .ink-flow{display:flex;flex-direction:column;gap:0;max-width:600px;margin:0 auto}
+    .ink-stage{display:flex;align-items:center;gap:16px;padding:12px 16px;opacity:0;transform:translateY(10px);transition:all 0.6s}
+    .ink-stage.visible{opacity:1;transform:translateY(0)}
+    .ink-dot{
+      width:10px;height:10px;border-radius:50%;flex-shrink:0;
+      background:#1D1D1B;position:relative;
+    }
+    .ink-dot::after{
+      content:'';position:absolute;top:10px;left:4px;
+      width:2px;height:32px;background:rgba(29,29,27,0.12);
+    }
+    .ink-stage:last-child .ink-dot::after{display:none}
+    .ink-label{font-size:11px;color:#1D1D1B;font-weight:500}
+    .ink-desc{font-size:9px;color:#57534E;margin-top:1px}
+    .ink-arrow{font-size:8px;color:#4E6E81;opacity:0.3;margin-left:auto}
+
+    /* ── Photo gallery ── */
+    .gallery{display:flex;gap:32px;flex-wrap:wrap;justify-content:center}
+    .photo-card{
+      background:#EFE8DC;padding:6px 6px 18px;
+      border:1px solid rgba(29,29,27,0.1);
+      box-shadow:2px 3px 0 rgba(0,0,0,0.04);
+      transform:rotate(var(--r,0deg));position:relative;max-width:260px;
+    }
+    .photo-card:nth-child(1){--r:-2.5deg}
+    .photo-card:nth-child(2){--r:1.8deg}
+    .photo-card:nth-child(3){--r:-1.2deg}
+    .photo-tape{
+      position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+      width:32px;height:14px;background:rgba(247,243,236,0.7);
+      border:1px solid rgba(29,29,27,0.08);
+    }
+    .photo-screen{
+      width:240px;height:160px;background:#E6DDCC;
+      border:1px solid rgba(29,29,27,0.06);position:relative;overflow:hidden;
+    }
+    .photo-screen .chat-line{
+      position:absolute;height:4px;background:rgba(29,29,27,0.08);border-radius:2px;
+    }
+    .photo-screen .chat-line:nth-child(1){top:20px;left:60px;width:100px}
+    .photo-screen .chat-line:nth-child(2){top:40px;left:20px;width:140px}
+    .photo-screen .chat-line:nth-child(3){top:60px;left:80px;width:80px;background:#1D1D1B;opacity:0.15}
+    .photo-screen .chat-line:nth-child(4){top:80px;left:20px;width:160px}
+    .photo-label{
+      text-align:center;margin-top:10px;
+      font-size:9px;color:#57534E;
+    }
+    .photo-annotation{
+      position:absolute;font-size:7px;color:#8A6A44;font-style:italic;
+      transform:rotate(-3deg);
+    }
+
+    /* ── Terminal / Installation ── */
+    .term-box{
+      background:#EFE8DC;border:1px solid rgba(29,29,27,0.08);
+      padding:24px;max-width:600px;margin:0 auto;
+    }
+    .term-line{display:flex;align-items:center;gap:12px;padding:6px 0;font-size:12px}
+    .term-prompt{color:#6A7352}
+    .term-cmd{color:#1D1D1B}
+    .term-comment{color:#57534E;opacity:0.5;font-style:italic;font-size:10px}
+    .term-label{
+      font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
+      color:#4E6E81;margin-bottom:16px;
+    }
+
+    /* ── Tree diagram ── */
+    .tree{font-size:12px;line-height:2;color:#1D1D1B;max-width:500px;margin:0 auto}
+    .tree .dir{font-weight:500}
+    .tree .file{color:#57534E}
+    .tree .depth-1{padding-left:24px}
+    .tree .depth-2{padding-left:48px}
+    .tree .depth-3{padding-left:72px}
+    .tree-hint{
+      font-size:8px;color:#8A6A44;margin-left:8px;font-style:italic;opacity:0.6;
+    }
+
+    /* ── Mechanical CI/CD ── */
+    .pipeline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
+    .pipe-stage{
+      background:#EFE8DC;border:1px solid rgba(29,29,27,0.08);
+      padding:10px 14px;font-size:9px;letter-spacing:0.5px;color:#1D1D1B;
+      text-align:center;min-width:70px;
+    }
+    .pipe-stage .ico{display:block;font-size:14px;margin-bottom:2px}
+    .pipe-arrow{font-size:8px;color:#4E6E81;opacity:0.3}
+
+    /* ── Roadmap ── */
+    .roadmap{display:flex;flex-direction:column;gap:8px;max-width:500px;margin:0 auto}
+    .rm-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(29,29,27,0.04)}
+    .rm-stamp{
+      width:28px;height:28px;border:1px solid #6A7352;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:10px;color:#6A7352;flex-shrink:0;
+    }
+    .rm-stamp.done{background:#6A7352;color:#F7F3EC;font-size:8px}
+    .rm-text{font-size:11px;color:#1D1D1B}
+    .rm-text.pending{color:#57534E;opacity:0.5}
+    .rm-text .sketch{font-style:italic;color:#8A6A44;opacity:0.4}
 
     /* ── Footer ── */
-    footer {
-      border-top: 1px solid #B8AB95;
-      padding: 48px 0 40px;
-      margin-top: 40px;
-      text-align: center;
+    footer{
+      border-top:1px solid rgba(29,29,27,0.06);
+      padding:60px 0 40px;text-align:center;
     }
-    footer h3 {
-      font-family: 'Anton', sans-serif;
-      font-size: 24px;
-      text-transform: uppercase;
-      color: #181818;
-      letter-spacing: 3px;
-      margin-bottom: 8px;
+    footer .sig{
+      font-family:'Instrument Serif',Georgia,serif;
+      font-size:18px;font-style:italic;color:#1D1D1B;margin-bottom:8px;
     }
-    footer .tagline {
-      font-size: 11px;
-      color: #7B756D;
-      font-family: 'Space Mono', monospace;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
+    footer .belief{font-size:10px;color:#57534E;margin-bottom:24px}
+    footer .links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+    footer .links a{
+      font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+      color:#57534E;text-decoration:none;padding:4px 8px;
+      border:1px solid rgba(29,29,27,0.06);
+      transition:all 0.2s;
     }
-    footer p {
-      font-size: 12px;
-      color: #555;
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-    footer .badges {
-      margin-top: 24px;
-      display: flex;
-      gap: 8px 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #6E8B63;
+    footer .links a:hover{border-color:#1D1D1B;color:#1D1D1B}
+
+    /* ── Revision ── */
+    .revision{
+      position:fixed;bottom:16px;right:16px;
+      font-size:7px;color:#57534E;opacity:0.2;
+      letter-spacing:0.5px;z-index:100;
+      font-family:'IBM Plex Mono',monospace;
     }
 
-    /* ── Responsive ── */
-    @media (max-width: 1000px) {
-      .hero { flex-direction: column; }
-      .hero-left, .hero-right { flex: 1; width: 100%; }
-      .hero-title { font-size: 60px; }
-      .features-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-right { min-height: 420px; }
+    /* ── tiny paperclip ── */
+    .clip{
+      position:absolute;width:20px;height:30px;
+      border:2px solid #57534E;border-radius:2px;opacity:0.08;
+      border-bottom:none;
     }
-    @media (max-width: 600px) {
-      .container { padding: 0 20px; }
-      .nav-links { display: none; }
-      .hero-title { font-size: 40px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .phone-frame { width: 160px; }
+
+    /* ── Scroll animations ── */
+    .fade-in{opacity:0;transform:translateY(16px);transition:all 0.7s ease}
+    .fade-in.visible{opacity:1;transform:translateY(0)}
+
+    /* ── Responsive ── */
+    @media(max-width:1000px){
+      .hero{flex-direction:column;gap:40px;padding:40px 0}
+      .hero-left,.hero-right{flex:1;width:100%}
+      .hero-title{font-size:56px}
+      .spread{flex-direction:column;gap:24px}
+      .museum{flex-direction:column;gap:24px}
+      .section-title{font-size:32px}
+    }
+    @media(max-width:600px){
+      .hero-title{font-size:40px}
+      .drafting-table{height:360px}
+      .bp-flow{flex-direction:column}
+      .gallery{flex-direction:column;align-items:center}
     }
   </style>
 </head>
 <body>
 
-  <!-- Zig-zag top -->
-  <div class="zigzag"></div>
+<div class="content">
+
+  <!-- Ruler -->
+  <div class="ruler"></div>
 
   <!-- Nav -->
   <nav class="container">
     <div class="nav-brand">Footprints</div>
     <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#offline">Offline AI</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="https://github.com/rajumark/Footprints/releases" target="_blank">Download</a></li>
+      <li><a href="#why">Why</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#model">Model</a></li>
+      <li><a href="#app">App</a></li>
+      <li><a href="#install">Install</a></li>
       <li><a href="https://github.com/rajumark/Footprints" target="_blank">GitHub</a></li>
     </ul>
+    <div class="nav-rule"></div>
   </nav>
 
-  <!-- Hero -->
+  <!-- ═══ HERO ═══ -->
   <section class="hero container">
     <div class="hero-left">
+      <div class="hero-label">✦ Introducing</div>
       <h1 class="hero-title">
-        <span>PRIVATE</span>
-        <span>AI</span>
-        <span>FOR</span>
-        <span>ANDROID</span>
+        Private AI<br>
+        <span class="thin">That Lives</span><br>
+        On Your Phone
       </h1>
-      <p class="hero-sub">
-        Run a powerful local LLM directly on your Android device. <strong>Footprints</strong> keeps every conversation on your phone — no cloud, no tracking, and no internet required.
+      <p class="hero-p">
+        Footprints is a completely offline AI companion powered by <strong>Qwen 2.5 0.5B</strong> running via <strong>llama.cpp</strong>. No cloud. No account. No tracking. Your thoughts never leave your device.
       </p>
-      <div class="hero-tags">
-        100% Offline &mdash; 100% Private &mdash; Local LLM &mdash; No Cloud
+      <div class="hero-badges">
+        <div class="hero-badge"><span>✓</span> 100% Offline</div>
+        <div class="hero-badge"><span>✓</span> 100% Private</div>
+        <div class="hero-badge"><span>✓</span> Open Source</div>
       </div>
-      <a href="https://github.com/rajumark/Footprints/releases" class="btn-ribbon" target="_blank">Download App</a>
+      <div class="hero-btns">
+        <a href="https://github.com/rajumark/Footprints/releases" class="btn-primary" target="_blank">
+          <span>↓</span> Download APK
+        </a>
+        <a href="https://github.com/rajumark/Footprints" class="btn-secondary" target="_blank">
+          View GitHub
+        </a>
+      </div>
     </div>
 
-    <!-- right collage -->
     <div class="hero-right">
-      <div class="phone-frame">
-        <svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="0" width="180" height="400" rx="18" fill="#2a2a2a" stroke="#555" stroke-width="1"/>
-          <rect x="18" y="16" width="164" height="340" rx="4" fill="#E6DCC9"/>
-          <rect x="18" y="356" width="164" height="28" rx="4" fill="#2a2a2a"/>
-          <circle cx="100" cy="370" r="6" fill="#333" stroke="#555" stroke-width="0.5"/>
+      <div class="drafting-table">
 
-          <!-- screen chat mock -->
-          <rect x="26" y="24" width="148" height="22" rx="3" fill="#181818"/>
-          <text x="36" y="38" fill="#F3EBDD" font-size="8" font-family="monospace">Footprints</text>
+        <div class="dt-note dt-note-1">Qwen 2.5 0.5B</div>
+        <div class="dt-note dt-note-2">llama.cpp / ggml</div>
 
-          <rect x="60" y="54" width="106" height="26" rx="4" fill="#fff" opacity="0.9"/>
-          <text x="66" y="70" fill="#202020" font-size="7" font-family="monospace">Hello! I&apos;m</text>
-          <text x="66" y="78" fill="#202020" font-size="7" font-family="monospace">Footprints.</text>
+        <div class="dt-label dt-label-1">Model: GGUF</div>
+        <div class="dt-label dt-label-2">Quant: Q4_K_M</div>
+        <div class="dt-label dt-label-3">Material 3</div>
+        <div class="dt-label dt-label-4">Android 11+</div>
 
-          <rect x="26" y="88" width="96" height="18" rx="4" fill="#181818"/>
-          <text x="32" y="100" fill="#F3EBDD" font-size="7" font-family="monospace">What is gravity?</text>
+        <div class="dt-line dt-line-1"></div>
+        <div class="dt-line dt-line-2"></div>
+        <div class="dt-chip dt-chip-1"></div>
+        <div class="dt-chip dt-chip-2"></div>
 
-          <rect x="70" y="114" width="96" height="34" rx="4" fill="#fff" opacity="0.9"/>
-          <text x="76" y="130" fill="#202020" font-size="7" font-family="monospace">Gravity is a</text>
-          <text x="76" y="140" fill="#202020" font-size="7" font-family="monospace">natural phenomenon...</text>
+        <div class="dt-stamp">Approved</div>
+        <div class="dt-measure"></div>
+        <div class="dt-arrow" style="top:160px;right:40px">↗</div>
+        <div class="dt-arrow" style="bottom:200px;left:40px">↘</div>
+
+        <!-- Phone SVG -->
+        <svg class="phone-sketch" viewBox="0 0 100 200" fill="none">
+          <rect x="2" y="1" width="96" height="198" rx="10" stroke="#1D1D1B" stroke-width="0.5" fill="#F7F3EC" opacity="0.6"/>
+          <rect x="8" y="8" width="84" height="160" rx="2" stroke="#1D1D1B" stroke-width="0.3" fill="#EFE8DC" opacity="0.4"/>
+          <rect x="8" y="168" width="84" height="20" rx="2" stroke="#1D1D1B" stroke-width="0.3" fill="none"/>
+          <circle cx="50" cy="178" r="4" stroke="#1D1D1B" stroke-width="0.3" fill="none"/>
+          <!-- screen content -->
+          <rect x="14" y="14" width="72" height="10" rx="2" stroke="#1D1D1B" stroke-width="0.2" fill="none"/>
+          <line x1="14" y1="30" x2="62" y2="30" stroke="#1D1D1B" stroke-width="0.3" opacity="0.3"/>
+          <line x1="14" y1="36" x2="50" y2="36" stroke="#1D1D1B" stroke-width="0.3" opacity="0.2"/>
+          <line x1="34" y1="48" x2="86" y2="48" stroke="#1D1D1B" stroke-width="0.3" opacity="0.3"/>
+          <line x1="14" y1="60" x2="70" y2="60" stroke="#1D1D1B" stroke-width="0.3" opacity="0.2"/>
+          <line x1="14" y1="72" x2="86" y2="72" stroke="#1D1D1B" stroke-width="0.3" opacity="0.25"/>
+          <line x1="30" y1="84" x2="86" y2="84" stroke="#1D1D1B" stroke-width="0.3" opacity="0.15"/>
         </svg>
-      </div>
 
-      <div class="desk-card card-ram">RAM <strong>3.2 GB</strong></div>
-      <div class="desk-card card-model">Model <strong>Qwen 2.5</strong></div>
-      <div class="desk-card card-privacy">No Cloud</div>
-      <div class="desk-card card-offline">100% <strong>Offline</strong></div>
-      <div class="desk-card card-bubble">Hello!<br><strong>How can I help?</strong></div>
-      <div class="desk-card card-floppy">💾</div>
-      <div class="desk-card card-notebook">📓</div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section id="features" class="features container">
-    <h2 class="section-title">WHY FOOTPRINTS?</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="pin"></div>
-        <h3>100% Offline</h3>
-        <p>No Internet Required. The entire model ships with the app — download once, chat forever without connectivity.</p>
-      </div>
-      <div class="feature-card">
-        <div class="pin"></div>
-        <h3>100% Private</h3>
-        <p>Your conversations never leave your device. No data sent to any server. True privacy by design.</p>
-      </div>
-      <div class="feature-card">
-        <div class="pin"></div>
-        <h3>Local LLM</h3>
-        <p>Run Qwen 2.5 0.5B directly on your phone. Powered by llama.cpp — the industry-standard on-device inference engine.</p>
-      </div>
-      <div class="feature-card">
-        <div class="pin"></div>
-        <h3>Fast & Optimized</h3>
-        <p>Optimized for Arm CPUs with hardware acceleration. Runs on modern Android devices with minimal battery impact.</p>
+        <div class="clip" style="top:20px;right:30px;transform:rotate(15deg)"></div>
       </div>
     </div>
   </section>
 
-  <!-- Timeline -->
-  <section id="offline" class="timeline-section container">
-    <h2 class="section-title">HOW IT WORKS</h2>
-    <div class="timeline">
-      <div class="timeline-step">
-        <div class="dot"></div>
-        <div class="label">Install App</div>
-        <div class="timeline-line"></div>
-        <div class="timeline-arrow">↓</div>
+  <!-- ═══ WHY ═══ -->
+  <section id="why" class="container fade-in">
+    <div class="section-number">01 / Why</div>
+    <h2 class="section-title">Why <em>Footprints</em> Exists</h2>
+    <div class="spread">
+      <div class="spread-left">
+        <div class="blockquote">"Every digital conversation leaves a footprint. Where does yours go?"</div>
+        <p style="font-size:13px;color:#57534E;line-height:1.8;margin-top:16px">
+          Today's AI sends your words to distant servers. They're stored, analysed, and sold. Footprints was built on a different belief:
+          your conversations belong to you — and only you.
+        </p>
       </div>
-      <div class="timeline-step">
-        <div class="dot"></div>
-        <div class="label">Model Extracts</div>
-        <div class="timeline-line"></div>
-        <div class="timeline-arrow">↓</div>
-      </div>
-      <div class="timeline-step">
-        <div class="dot"></div>
-        <div class="label">Start Chat</div>
-        <div class="timeline-line"></div>
-        <div class="timeline-arrow">↓</div>
-      </div>
-      <div class="timeline-step">
-        <div class="dot"></div>
-        <div class="label">Works Offline</div>
+      <div class="spread-right">
+        <div class="diagram-cloud">
+          <span class="node strike">Your Message</span>
+          <span class="arrow">→</span>
+          <span class="node strike">Cloud Server</span>
+          <span class="arrow">→</span>
+          <span class="node strike">Processed</span>
+          <span class="arrow">→</span>
+          <span class="node strike">Stored</span>
+          <span style="font-size:18px;opacity:0.15;margin:0 4px">✕</span>
+          <span class="node-solid">Your Phone</span>
+          <span class="arrow">→</span>
+          <span class="node-solid">You</span>
+        </div>
+        <p style="font-size:10px;color:#57534E;margin-top:12px;opacity:0.6;font-style:italic">
+          No cloud. No intermediary. Privacy by architecture, not by policy.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Gallery -->
-  <section id="gallery" class="gallery-section container">
-    <h2 class="section-title">SCREENSHOTS</h2>
+  <!-- ═══ BLUEPRINT ═══ -->
+  <section id="architecture" class="container fade-in">
+    <div class="section-number">02 / Architecture</div>
+    <h2 class="section-title">Under The <em>Hood</em></h2>
+    <div class="blueprint">
+      <div class="bp-title">■ System Architecture — Revision A</div>
+      <div class="bp-flow">
+        <span class="bp-node">Android<br><span class="sub">OS Layer</span></span>
+        <span class="bp-arrow">→</span>
+        <span class="bp-node">Jetpack<br><span class="sub">Compose UI</span></span>
+        <span class="bp-arrow">→</span>
+        <span class="bp-node">Chat Layer<br><span class="sub">ViewModel</span></span>
+        <span class="bp-arrow">→</span>
+        <span class="bp-node">llama.cpp<br><span class="sub">Inference Engine</span></span>
+        <span class="bp-arrow">→</span>
+        <span class="bp-node">Qwen 2.5<br><span class="sub">0.5B / GGUF</span></span>
+        <span class="bp-arrow">→</span>
+        <span class="bp-node">CPU<br><span class="sub">Arm v8</span></span>
+      </div>
+      <div class="bp-note">hover components for details</div>
+    </div>
+  </section>
+
+  <!-- ═══ MODEL ═══ -->
+  <section id="model" class="container fade-in">
+    <div class="section-number">03 / Model</div>
+    <h2 class="section-title">Meet The <em>Brain</em></h2>
+    <div class="museum">
+      <div class="museum-left">
+        <div class="spec-card">
+          <div class="spec-title">Qwen 2.5 0.5B</div>
+          <table class="spec-table">
+            <tr><td>Parameters</td><td>500 Million</td></tr>
+            <tr><td>Type</td><td>Instruction Tuned</td></tr>
+            <tr><td>Format</td><td>GGUF</td></tr>
+            <tr><td>Quantization</td><td>Q4_K_M</td></tr>
+            <tr><td>Size</td><td>469 MB</td></tr>
+            <tr><td>Engine</td><td>llama.cpp (C++)</td></tr>
+            <tr><td>Target</td><td>Edge / Mobile</td></tr>
+            <tr><td>License</td><td>Apache 2.0</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="museum-right">
+        <div class="exploded">
+          <div class="exploded-phone"></div>
+          <div class="part part-1">GGUF Header</div>
+          <div class="part part-2">Vocabulary</div>
+          <div class="part part-3">Weights</div>
+          <div class="part part-4">Q4_K_M</div>
+          <div class="part part-5">lm_head</div>
+          <span style="position:absolute;bottom:8px;right:12px;font-size:7px;color:#4E6E81;opacity:0.3;letter-spacing:1px">exploded view</span>
+        </div>
+        <p style="font-size:11px;color:#57534E;margin-top:16px;line-height:1.7">
+          The model is quantized to 4-bit using the K_M method — balancing quality and size for on-device inference.
+          469 MB fits comfortably on any modern Android device.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MESSAGE JOURNEY ═══ -->
+  <section id="journey" class="container fade-in">
+    <div class="section-number">04 / Data Flow</div>
+    <h2 class="section-title">How Every Message <em>Travels</em></h2>
+    <div class="ink-flow">
+      <div class="ink-stage" data-delay="0">
+        <div class="ink-dot"></div>
+        <div><div class="ink-label">You Type</div><div class="ink-desc">Input captured by Compose UI</div></div>
+        <div class="ink-arrow">⬇</div>
+      </div>
+      <div class="ink-stage" data-delay="150">
+        <div class="ink-dot"></div>
+        <div><div class="ink-label">Tokenizer</div><div class="ink-desc">Text → token IDs (BPE)</div></div>
+        <div class="ink-arrow">⬇</div>
+      </div>
+      <div class="ink-stage" data-delay="300">
+        <div class="ink-dot"></div>
+        <div><div class="ink-label">Inference</div><div class="ink-desc">llama.cpp evaluates on CPU</div></div>
+        <div class="ink-arrow">⬇</div>
+      </div>
+      <div class="ink-stage" data-delay="450">
+        <div class="ink-dot"></div>
+        <div><div class="ink-label">Sampling</div><div class="ink-desc">Temperature · Top-P · Repeat Penalty</div></div>
+        <div class="ink-arrow">⬇</div>
+      </div>
+      <div class="ink-stage" data-delay="600">
+        <div class="ink-dot"></div>
+        <div><div class="ink-label">Streaming</div><div class="ink-desc">Tokens arrive as Flow&lt;String&gt;</div></div>
+        <div class="ink-arrow">⬇</div>
+      </div>
+      <div class="ink-stage" data-delay="750">
+        <div class="ink-dot"></div>
+        <div><div class="ink-label">Response</div><div class="ink-desc">You see the reply appear in real time</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ APP PREVIEW ═══ -->
+  <section id="app" class="container fade-in">
+    <div class="section-number">05 / App</div>
+    <h2 class="section-title">App <em>Preview</em></h2>
     <div class="gallery">
-      <div class="photo">
-        <div class="photo-box">Chat Screen<br><span style="font-size:8px;">Tap image to view</span></div>
-        <div style="text-align:center;margin-top:8px;font-size:10px;color:#7B756D;font-family:'Space Mono',monospace;">Footprints Chat</div>
+      <div class="photo-card">
+        <div class="photo-tape"></div>
+        <div class="photo-screen">
+          <div class="chat-line" style="top:20px;left:60px;width:100px;height:6px"></div>
+          <div class="chat-line" style="top:36px;left:60px;width:60px;height:4px"></div>
+          <div class="chat-line" style="top:56px;left:20px;width:140px;height:6px;background:#1D1D1B;opacity:0.12"></div>
+          <div class="chat-line" style="top:72px;left:20px;width:100px;height:4px;background:#1D1D1B;opacity:0.12"></div>
+          <div class="chat-line" style="top:96px;left:80px;width:120px;height:6px"></div>
+          <div class="chat-line" style="top:112px;left:80px;width:90px;height:4px"></div>
+          <div class="chat-line" style="top:136px;left:20px;width:160px;height:6px;background:#1D1D1B;opacity:0.12"></div>
+        </div>
+        <div class="photo-label">Chat interface — streaming response</div>
+        <span class="photo-annotation" style="bottom:-4px;right:8px">entirely offline</span>
       </div>
-      <div class="photo">
-        <div class="photo-box">Loading Model<br><span style="font-size:8px;">First-run setup</span></div>
-        <div style="text-align:center;margin-top:8px;font-size:10px;color:#7B756D;font-family:'Space Mono',monospace;">Model Loading</div>
+      <div class="photo-card">
+        <div class="photo-tape"></div>
+        <div class="photo-screen">
+          <div class="chat-line" style="top:30px;left:40%;width:60px;height:4px;background:#1D1D1B;opacity:0.06"></div>
+          <div class="chat-line" style="top:50px;left:10%;width:80%;height:5px"></div>
+          <div class="chat-line" style="top:62px;left:10%;width:60%;height:4px"></div>
+          <div class="chat-line" style="top:90px;left:10%;width:80%;height:5px"></div>
+          <div class="chat-line" style="top:102px;left:10%;width:40%;height:4px"></div>
+        </div>
+        <div class="photo-label">Model loading — first run</div>
+        <span class="photo-annotation" style="bottom:-4px;left:8px">~30 seconds</span>
       </div>
-      <div class="photo">
-        <div class="photo-box">App Icon<br><span style="font-size:8px;">On home screen</span></div>
-        <div style="text-align:center;margin-top:8px;font-size:10px;color:#7B756D;font-family:'Space Mono',monospace;">Launcher Icon</div>
+      <div class="photo-card">
+        <div class="photo-tape"></div>
+        <div class="photo-screen">
+          <div class="chat-line" style="top:40px;left:20px;width:70%;height:4px;background:#1D1D1B;opacity:0.08"></div>
+          <div class="chat-line" style="top:52px;left:20px;width:50%;height:3px;background:#1D1D1B;opacity:0.08"></div>
+          <div class="chat-line" style="top:80px;left:20px;width:30%;height:4px"></div>
+          <div class="chat-line" style="top:100px;left:20px;width:80%;height:3px;background:#1D1D1B;opacity:0.08"></div>
+          <div class="chat-line" style="top:110px;left:20px;width:60%;height:3px;background:#1D1D1B;opacity:0.08"></div>
+        </div>
+        <div class="photo-label">Chat history — conversation flow</div>
+        <span class="photo-annotation" style="bottom:-4px;right:8px">no cloud connection</span>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <img src="logo.png" alt="Footprints" width="64" style="margin-bottom:16px;opacity:0.8;">
-      <h3>Footprints</h3>
-      <div class="tagline">PRIVATE AI FOR ANDROID</div>
-      <p>Made for people who believe AI belongs on their own device.<br>100% Offline. 100% Private. Open Source.</p>
-      <div class="badges">
-        <span>✦ No Cloud</span>
-        <span>✦ No Tracking</span>
-        <span>✦ Your Data, Your Device</span>
-      </div>
+  <!-- ═══ INSTALL ═══ -->
+  <section id="install" class="container fade-in">
+    <div class="section-number">06 / Installation</div>
+    <h2 class="section-title">Get <em>Started</em></h2>
+    <div class="term-box">
+      <div class="term-label">▸ Installation Manual</div>
+      <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd">Download the latest APK from GitHub Releases</span></div>
+      <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd">adb install app-debug.apk</span><span class="term-comment"># or open on device</span></div>
+      <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd">git clone https://github.com/rajumark/Footprints.git</span></div>
+      <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd">cd Footprints && ./gradlew assembleDebug</span><span class="term-comment"># build from source</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ PROJECT STRUCTURE ═══ -->
+  <section id="structure" class="container fade-in">
+    <div class="section-number">07 / Structure</div>
+    <h2 class="section-title">Project <em>Map</em></h2>
+    <div class="tree">
+      <div class="dir">app/ <span class="tree-hint">Android module</span></div>
+      <div class="file depth-1">├── src/main/assets/<span class="tree-hint">← bundled GGUF model (469 MB, LFS)</span></div>
+      <div class="file depth-2">├── qwen2.5-0.5b-instruct-q4_k_m.gguf</div>
+      <div class="file depth-1">├── java/com/example/footprints/</div>
+      <div class="file depth-2">├── llm/LlmEngine.kt<span class="tree-hint">inference wrapper</span></div>
+      <div class="file depth-2">├── ui/chat/ChatScreen.kt<span class="tree-hint">Compose UI</span></div>
+      <div class="file depth-2">├── ui/chat/ChatViewModel.kt<span class="tree-hint">state management</span></div>
+      <div class="file depth-2">├── ui/chat/ChatMessage.kt<span class="tree-hint">data model</span></div>
+      <div class="file depth-2">└── theme/<span class="tree-hint">Material 3</span></div>
+      <div class="file depth-1">├── build.gradle.kts</div>
+      <div class="file depth-1">└── AndroidManifest.xml</div>
+    </div>
+  </section>
+
+  <!-- ═══ CI/CD ═══ -->
+  <section id="cicd" class="container fade-in">
+    <div class="section-number">08 / Pipeline</div>
+    <h2 class="section-title">CI/CD <em>Assembly Line</em></h2>
+    <div class="pipeline">
+      <span class="pipe-stage"><span class="ico">⌨</span>Commit</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-stage"><span class="ico">⚙</span>Actions</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-stage"><span class="ico">🏗</span>Build</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-stage"><span class="ico">📦</span>Release</span>
+      <span class="pipe-arrow">→</span>
+      <span class="pipe-stage"><span class="ico">📱</span>APK</span>
+    </div>
+    <p style="font-size:9px;color:#57534E;text-align:center;margin-top:16px;opacity:0.5">
+      Each push to <strong>main</strong> with <strong>#go</strong> triggers the pipeline
+    </p>
+  </section>
+
+  <!-- ═══ ROADMAP ═══ -->
+  <section id="roadmap" class="container fade-in">
+    <div class="section-number">09 / Roadmap</div>
+    <h2 class="section-title">What's <em>Next</em></h2>
+    <div class="roadmap">
+      <div class="rm-item"><div class="rm-stamp done">✓</div><span class="rm-text">Basic chat with local Qwen 2.5 0.5B</span></div>
+      <div class="rm-item"><div class="rm-stamp done">✓</div><span class="rm-text">100% offline inference</span></div>
+      <div class="rm-item"><div class="rm-stamp done">✓</div><span class="rm-text">CI/CD with auto-release</span></div>
+      <div class="rm-item"><div class="rm-stamp"></div><span class="rm-text pending">Chat history persistence</span></div>
+      <div class="rm-item"><div class="rm-stamp"></div><span class="rm-text pending">Token streaming animation</span></div>
+      <div class="rm-item"><div class="rm-stamp"></div><span class="rm-text pending">System prompt customization</span></div>
+      <div class="rm-item"><div class="rm-stamp"></div><span class="rm-text pending"><span class="sketch">Export conversations</span></span></div>
+      <div class="rm-item"><div class="rm-stamp"></div><span class="rm-text pending"><span class="sketch">Multi-model support</span></span></div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="container">
+    <div class="sig">Built with ❤️ for the Edge AI era</div>
+    <div class="belief">Your thoughts belong to you.</div>
+    <div class="links">
+      <a href="https://github.com/rajumark/Footprints" target="_blank">GitHub</a>
+      <a href="LICENSE">License</a>
+      <a href="https://github.com/rajumark/Footprints/releases" target="_blank">Releases</a>
+      <a href="https://github.com/rajumark/Footprints/blob/main/docs/README.md" target="_blank">Documentation</a>
     </div>
   </footer>
 
-  <!-- bottom zig-zag -->
-  <div class="zigzag" style="margin-top:20px;"></div>
+  <div class="revision">REV 1.0 — Footprints</div>
+
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+  // ── Scroll animations ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Animate ink stages with stagger
+        if (entry.target.classList.contains('ink-flow')) return;
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ── Ink flow stagger ──
+  const inkObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const stages = entry.target.querySelectorAll('.ink-stage');
+        stages.forEach((s, i) => {
+          setTimeout(() => s.classList.add('visible'), parseInt(s.dataset.delay) || i * 150);
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.ink-flow').forEach(el => inkObserver.observe(el));
+</script>
 
 </body>
 </html>
