@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footprints — Private AI for Android</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Space+Mono&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #F3EBDD;
+      color: #202020;
+      font-family: 'IBM Plex Mono', 'Courier Prime', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Paper texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.05;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px),
+        radial-gradient(circle at 20% 35%, rgba(139,119,90,0.15) 0, transparent 150px),
+        radial-gradient(circle at 75% 60%, rgba(139,119,90,0.08) 0, transparent 200px),
+        radial-gradient(circle at 40% 80%, rgba(100,80,60,0.06) 0, transparent 120px);
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Zig-zag top border ── */
+    .zigzag {
+      width: 100%;
+      height: 12px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #F3EBDD 0px, #F3EBDD 8px,
+        transparent 8px, transparent 12px,
+        #F3EBDD 12px, #F3EBDD 16px
+      );
+      background-size: 16px 16px;
+      background-color: #B8AB95;
+    }
+    .zigzag + .zigzag {
+      margin-top: 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #B8AB95;
+    }
+    .nav-brand {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #202020;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #181818; }
+
+    /* ── Hero ── */
+    .hero {
+      display: flex;
+      gap: 60px;
+      padding: 60px 0 40px;
+      align-items: center;
+    }
+    .hero-left { flex: 0 0 55%; }
+    .hero-right { flex: 0 0 45%; position: relative; }
+
+    .hero-title {
+      font-family: 'Anton', 'Bebas Neue', sans-serif;
+      font-size: 110px;
+      font-weight: 900;
+      line-height: 0.92;
+      text-transform: uppercase;
+      color: #181818;
+      letter-spacing: -3px;
+    }
+    .hero-title span { display: block; }
+
+    .hero-sub {
+      margin-top: 28px;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+      max-width: 440px;
+    }
+    .hero-sub strong { color: #202020; font-weight: 600; }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #7B756D;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .hero-tags::before { content: '◆'; color: #6E8B63; margin-right: 4px; }
+
+    /* ── Vintage ribbon button ── */
+    .btn-ribbon {
+      display: inline-block;
+      margin-top: 32px;
+      padding: 14px 40px 14px 36px;
+      background: #181818;
+      color: #F3EBDD;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.25s;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.08);
+    }
+    .btn-ribbon::after {
+      content: '';
+      position: absolute;
+      top: 0; right: -12px;
+      width: 0; height: 0;
+      border-top: 21px solid transparent;
+      border-bottom: 21px solid transparent;
+      border-left: 12px solid #181818;
+    }
+    .btn-ribbon:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.12);
+    }
+
+    /* ── Hero right collage ── */
+    .phone-frame {
+      width: 220px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .phone-frame svg { display: block; width: 100%; filter: saturate(0.3) contrast(0.9); }
+
+    .desk-card {
+      position: absolute;
+      background: #EFE6D5;
+      border: 1px solid #B8AB95;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 2px 3px 0 rgba(0,0,0,0.06);
+      animation: float 4s ease-in-out infinite;
+    }
+    .desk-card strong { display: block; font-size: 13px; color: #181818; margin-top: 2px; }
+
+    .card-ram       { top: -10px;  right: 0;    transform: rotate(-5deg);  animation-delay: 0s; }
+    .card-model     { top: 70px;   right: -40px; transform: rotate(3deg);   animation-delay: 0.8s; }
+    .card-privacy   { bottom: 30px; right: -20px; transform: rotate(8deg);   animation-delay: 1.6s; background: #59634A; color: #F3EBDD; border-color: #59634A; }
+    .card-offline   { bottom: 80px; left: -50px;  transform: rotate(-7deg);  animation-delay: 2.4s; }
+    .card-bubble    { top: 130px;  left: -60px;   transform: rotate(-3deg);  animation-delay: 0.4s; background: #E6DCC9; }
+    .card-floppy    { bottom: -20px; left: -30px; transform: rotate(12deg);  animation-delay: 1.2s; padding: 8px; font-size: 20px; }
+    .card-notebook  { top: -20px;  left: -30px;   transform: rotate(-8deg);  animation-delay: 2s; padding: 8px; font-size: 18px; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+      50%      { transform: translateY(-4px) rotate(var(--r, 0deg)); }
+    }
+    .desk-card           { --r: 0deg; }
+    .card-ram     { --r: -5deg; }
+    .card-model   { --r: 3deg; }
+    .card-privacy { --r: 8deg; }
+    .card-offline { --r: -7deg; }
+    .card-bubble  { --r: -3deg; }
+    .card-floppy  { --r: 12deg; }
+    .card-notebook{ --r: -8deg; }
+
+    /* ── Section title ── */
+    .section-title {
+      font-family: 'Anton', 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      text-transform: uppercase;
+      color: #181818;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: repeating-linear-gradient(90deg, #181818 0, #181818 6px, transparent 6px, transparent 10px);
+    }
+
+    /* ── Features ── */
+    .features {
+      padding: 60px 0;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+    .feature-card {
+      background: #EFE6D5;
+      border: 1px solid #B8AB95;
+      padding: 32px 24px 24px;
+      position: relative;
+      transform: rotate(var(--r, 0deg));
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { transform: rotate(0deg); }
+    .feature-card:nth-child(1) { --r: -1.5deg; }
+    .feature-card:nth-child(2) { --r: 1deg; }
+    .feature-card:nth-child(3) { --r: -0.5deg; }
+    .feature-card:nth-child(4) { --r: 2deg; }
+
+    .pin {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px; height: 18px;
+      background: radial-gradient(circle at 35% 35%, #aaa, #666);
+      border-radius: 50%;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+    }
+    .pin::after {
+      content: '';
+      position: absolute;
+      top: 4px; left: 6px;
+      width: 6px; height: 6px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+    }
+
+    .feature-card h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      text-transform: uppercase;
+      color: #181818;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .feature-card p {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* ── Timeline ── */
+    .timeline-section { padding: 60px 0; }
+    .timeline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .timeline-step {
+      text-align: center;
+      position: relative;
+      flex: 1;
+    }
+    .timeline-step .dot {
+      width: 14px; height: 14px;
+      background: #181818;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      position: relative;
+      z-index: 2;
+    }
+    .timeline-step .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #555;
+    }
+    .timeline-line {
+      position: absolute;
+      top: 7px;
+      left: 50%;
+      width: 100%;
+      height: 1px;
+      background: #B8AB95;
+      z-index: 0;
+    }
+    .timeline-step:last-child .timeline-line { display: none; }
+    .timeline-arrow {
+      display: inline-block;
+      margin-top: 6px;
+      color: #6E8B63;
+      font-size: 16px;
+    }
+
+    /* ── Screenshot gallery ── */
+    .gallery-section { padding: 60px 0; }
+    .gallery {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .photo {
+      background: #EFE6D5;
+      padding: 10px 10px 28px;
+      border: 1px solid #B8AB95;
+      box-shadow: 3px 4px 0 rgba(0,0,0,0.06);
+      transform: rotate(var(--r, 0deg));
+      max-width: 280px;
+    }
+    .photo:nth-child(1) { --r: -3deg; }
+    .photo:nth-child(2) { --r: 1.5deg; }
+    .photo:nth-child(3) { --r: -1deg; }
+
+    .photo .tape {
+      width: 40px; height: 20px;
+      background: rgba(239,230,213,0.7);
+      border: 1px solid #B8AB95;
+      position: absolute;
+    }
+    .photo-box {
+      width: 100%;
+      height: 200px;
+      background: #E6DCC9;
+      border: 1px solid #B8AB95;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #7B756D;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid #B8AB95;
+      padding: 48px 0 40px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    footer h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #181818;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+    footer .tagline {
+      font-size: 11px;
+      color: #7B756D;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    footer p {
+      font-size: 12px;
+      color: #555;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    footer .badges {
+      margin-top: 24px;
+      display: flex;
+      gap: 8px 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6E8B63;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1000px) {
+      .hero { flex-direction: column; }
+      .hero-left, .hero-right { flex: 1; width: 100%; }
+      .hero-title { font-size: 60px; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-right { min-height: 420px; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero-title { font-size: 40px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .phone-frame { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Zig-zag top -->
+  <div class="zigzag"></div>
+
+  <!-- Nav -->
+  <nav class="container">
+    <div class="nav-brand">Footprints</div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#offline">Offline AI</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="https://github.com/rajumark/Footprints/releases" target="_blank">Download</a></li>
+      <li><a href="https://github.com/rajumark/Footprints" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero container">
+    <div class="hero-left">
+      <h1 class="hero-title">
+        <span>PRIVATE</span>
+        <span>AI</span>
+        <span>FOR</span>
+        <span>ANDROID</span>
+      </h1>
+      <p class="hero-sub">
+        Run a powerful local LLM directly on your Android device. <strong>Footprints</strong> keeps every conversation on your phone — no cloud, no tracking, and no internet required.
+      </p>
+      <div class="hero-tags">
+        100% Offline &mdash; 100% Private &mdash; Local LLM &mdash; No Cloud
+      </div>
+      <a href="https://github.com/rajumark/Footprints/releases" class="btn-ribbon" target="_blank">Download App</a>
+    </div>
+
+    <!-- right collage -->
+    <div class="hero-right">
+      <div class="phone-frame">
+        <svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="0" width="180" height="400" rx="18" fill="#2a2a2a" stroke="#555" stroke-width="1"/>
+          <rect x="18" y="16" width="164" height="340" rx="4" fill="#E6DCC9"/>
+          <rect x="18" y="356" width="164" height="28" rx="4" fill="#2a2a2a"/>
+          <circle cx="100" cy="370" r="6" fill="#333" stroke="#555" stroke-width="0.5"/>
+
+          <!-- screen chat mock -->
+          <rect x="26" y="24" width="148" height="22" rx="3" fill="#181818"/>
+          <text x="36" y="38" fill="#F3EBDD" font-size="8" font-family="monospace">Footprints</text>
+
+          <rect x="60" y="54" width="106" height="26" rx="4" fill="#fff" opacity="0.9"/>
+          <text x="66" y="70" fill="#202020" font-size="7" font-family="monospace">Hello! I&apos;m</text>
+          <text x="66" y="78" fill="#202020" font-size="7" font-family="monospace">Footprints.</text>
+
+          <rect x="26" y="88" width="96" height="18" rx="4" fill="#181818"/>
+          <text x="32" y="100" fill="#F3EBDD" font-size="7" font-family="monospace">What is gravity?</text>
+
+          <rect x="70" y="114" width="96" height="34" rx="4" fill="#fff" opacity="0.9"/>
+          <text x="76" y="130" fill="#202020" font-size="7" font-family="monospace">Gravity is a</text>
+          <text x="76" y="140" fill="#202020" font-size="7" font-family="monospace">natural phenomenon...</text>
+        </svg>
+      </div>
+
+      <div class="desk-card card-ram">RAM <strong>3.2 GB</strong></div>
+      <div class="desk-card card-model">Model <strong>Qwen 2.5</strong></div>
+      <div class="desk-card card-privacy">No Cloud</div>
+      <div class="desk-card card-offline">100% <strong>Offline</strong></div>
+      <div class="desk-card card-bubble">Hello!<br><strong>How can I help?</strong></div>
+      <div class="desk-card card-floppy">💾</div>
+      <div class="desk-card card-notebook">📓</div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="features container">
+    <h2 class="section-title">WHY FOOTPRINTS?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="pin"></div>
+        <h3>100% Offline</h3>
+        <p>No Internet Required. The entire model ships with the app — download once, chat forever without connectivity.</p>
+      </div>
+      <div class="feature-card">
+        <div class="pin"></div>
+        <h3>100% Private</h3>
+        <p>Your conversations never leave your device. No data sent to any server. True privacy by design.</p>
+      </div>
+      <div class="feature-card">
+        <div class="pin"></div>
+        <h3>Local LLM</h3>
+        <p>Run Qwen 2.5 0.5B directly on your phone. Powered by llama.cpp — the industry-standard on-device inference engine.</p>
+      </div>
+      <div class="feature-card">
+        <div class="pin"></div>
+        <h3>Fast & Optimized</h3>
+        <p>Optimized for Arm CPUs with hardware acceleration. Runs on modern Android devices with minimal battery impact.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="offline" class="timeline-section container">
+    <h2 class="section-title">HOW IT WORKS</h2>
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="label">Install App</div>
+        <div class="timeline-line"></div>
+        <div class="timeline-arrow">↓</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="label">Model Extracts</div>
+        <div class="timeline-line"></div>
+        <div class="timeline-arrow">↓</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="label">Start Chat</div>
+        <div class="timeline-line"></div>
+        <div class="timeline-arrow">↓</div>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <div class="label">Works Offline</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="gallery-section container">
+    <h2 class="section-title">SCREENSHOTS</h2>
+    <div class="gallery">
+      <div class="photo">
+        <div class="photo-box">Chat Screen<br><span style="font-size:8px;">Tap image to view</span></div>
+        <div style="text-align:center;margin-top:8px;font-size:10px;color:#7B756D;font-family:'Space Mono',monospace;">Footprints Chat</div>
+      </div>
+      <div class="photo">
+        <div class="photo-box">Loading Model<br><span style="font-size:8px;">First-run setup</span></div>
+        <div style="text-align:center;margin-top:8px;font-size:10px;color:#7B756D;font-family:'Space Mono',monospace;">Model Loading</div>
+      </div>
+      <div class="photo">
+        <div class="photo-box">App Icon<br><span style="font-size:8px;">On home screen</span></div>
+        <div style="text-align:center;margin-top:8px;font-size:10px;color:#7B756D;font-family:'Space Mono',monospace;">Launcher Icon</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <img src="logo.png" alt="Footprints" width="64" style="margin-bottom:16px;opacity:0.8;">
+      <h3>Footprints</h3>
+      <div class="tagline">PRIVATE AI FOR ANDROID</div>
+      <p>Made for people who believe AI belongs on their own device.<br>100% Offline. 100% Private. Open Source.</p>
+      <div class="badges">
+        <span>✦ No Cloud</span>
+        <span>✦ No Tracking</span>
+        <span>✦ Your Data, Your Device</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- bottom zig-zag -->
+  <div class="zigzag" style="margin-top:20px;"></div>
+
+</body>
+</html>
