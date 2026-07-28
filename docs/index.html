@@ -3,9 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Footprints</title>
+  <title>Footprints — Private AI for Android</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      background:#CFE2F2;
+      font-family:'Inter',sans-serif;
+      color:#3948A5;
+      padding:60px 20px 100px;
+      -webkit-font-smoothing:antialiased;
+    }
+    .container{
+      max-width:1320px;margin:0 auto;
+    }
+
+    /* ── Card ── */
+    .card{
+      background:#FBF8EF;
+      border:1.5px solid #3948A5;
+      border-radius:34px;
+      overflow:hidden;
+      margin-bottom:48px;
+    }
+
+    /* ── HERO ── */
+    .hero{height:780px;display:flex;flex-direction:column;position:relative}
+    .hero-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:32px 40px 0;flex-shrink:0;
+    }
+    .hero-nav{display:flex;gap:26px;align-items:center}
+    .hero-nav a{
+      font-size:13px;font-weight:500;letter-spacing:0.06em;
+      color:#3948A5;text-decoration:none;transition:opacity 0.25s;
+    }
+    .hero-nav a:hover{opacity:0.7}
+
+    .hero-nav .ig{width:18px;height:18px;display:block;opacity:0.7}
+    .hero-btn{
+      height:36px;padding:0 22px;
+      border:1.5px solid #3948A5;border-radius:999px;
+      background:transparent;color:#3948A5;
+      font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
+      letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;
+      transition:background 0.25s,color 0.25s;white-space:nowrap;
+    }
+    .hero-btn:hover{background:#3948A5;color:#fff}
+
+    .hero-body{display:flex;flex:1;min-height:0}
+    .hero-left{flex:0 0 50%;display:flex;flex-direction:column;justify-content:space-between;padding:0 0 0 55px;position:relative}
+    .hero-left-top{padding-top:150px}
+    .hero-left-top h2{
+      font-size:42px;font-weight:500;max-width:520px;line-height:1.2;
+      color:#3948A5;
+    }
+    .hero-left-top p{
+      font-size:15px;line-height:170%;max-width:470px;margin-top:20px;
+      color:#3948A5;opacity:0.85;
+    }
+    .hero-left-bottom{
+      font-family:'Cormorant Garamond',serif;
+      font-size:96px;font-style:italic;font-weight:600;
+      color:#3948A5;line-height:0.9;padding-bottom:60px;
+    }
+
+    .hero-right{flex:0 0 50%;position:relative;overflow:hidden}
+    .hero-right img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 8s ease}
+    .hero-right:hover img{transform:scale(1.04)}
+
+    .hero-cta{
+      position:absolute;bottom:45px;right:45px;
+      font-size:20px;color:#fff;letter-spacing:0.02em;
+      font-weight:500;
+    }
+
+    @media(max-width:900px){
+      .hero{height:auto}
+      .hero-body{flex-direction:column}
+      .hero-left,.hero-right{flex:1}
+      .hero-left-top{padding-top:60px}
+      .hero-left-bottom{font-size:52px}
+      .hero-right{height:360px}
+    }
+    @media(max-width:640px){
+      .hero-header{flex-wrap:wrap;gap:16px;padding:20px 24px}
+      .hero-nav{flex-wrap:wrap;gap:16px}
+      .hero-left{padding-left:24px}
+      .hero-left-top h2{font-size:28px}
+    }
+
+    /* ── SERVICES ── */
+    .services{height:620px;display:flex;flex-direction:column;position:relative}
+    .services-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:28px 40px 0;flex-shrink:0;
+    }
+    .services-brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:42px;font-style:italic;font-weight:600;
+      color:#3948A5;line-height:1;
+    }
+    .services-body{display:flex;flex:1;padding:40px 40px 32px;gap:0;min-height:0}
+    .services-left{flex:0 0 55%;display:flex;flex-direction:column}
+    .services-label{
+      font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+      color:#3948A5;margin-bottom:16px;opacity:0.7;
+    }
+    .services-left h2{
+      font-size:52px;font-weight:500;max-width:540px;line-height:1.1;
+      color:#3948A5;
+    }
+    .services-left p{
+      font-size:16px;line-height:170%;max-width:450px;margin-top:20px;
+      color:#3948A5;opacity:0.85;
+    }
+    .services-right{
+      flex:0 0 45%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:40px;
+    }
+
+    /* ── Star ── */
+    .star{
+      width:140px;height:140px;margin-bottom:24px;
+      animation:floatStar 6s ease-in-out infinite;
+    }
+    @keyframes floatStar{
+      0%,100%{transform:translateY(0) rotate(8deg)}
+      50%{transform:translateY(-10px) rotate(8deg)}
+    }
+
+    /* ── Accordion ── */
+    .accordion{width:100%}
+    .acc-item{
+      display:flex;align-items:center;justify-content:space-between;
+      height:56px;padding:0 10px;
+      border-bottom:1.5px solid #3948A5;cursor:pointer;
+      transition:background 0.25s;
+    }
+    .acc-item:last-child{border-bottom:none}
+    .acc-item:hover{background:#F6F2E8}
+    .acc-item span{font-size:13px;font-weight:500;color:#3948A5}
+    .acc-item .plus{font-size:18px;font-weight:400;line-height:1}
+
+    .services-body .book-btn{
+      align-self:flex-end;margin-top:auto;
+      width:170px;height:42px;border-radius:999px;
+      border:1.5px solid #3948A5;background:transparent;
+      font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
+      letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;
+      cursor:pointer;transition:background 0.25s,color 0.25s;
+    }
+    .services-body .book-btn:hover{background:#3948A5;color:#fff}
+
+    @media(max-width:900px){
+      .services{height:auto}
+      .services-body{flex-direction:column;padding:24px}
+      .services-left,.services-right{flex:1}
+      .services-left h2{font-size:32px}
+    }
+    @media(max-width:640px){
+      .services-header{padding:20px 24px;flex-wrap:wrap;gap:12px}
+    }
+
+    /* ── MORE SECTIONS ── */
+    .slim-card{
+      background:#FBF8EF;border:1.5px solid #3948A5;border-radius:34px;
+      padding:60px 55px;margin-bottom:48px;
+    }
+    .slim-card h2{
+      font-size:52px;font-weight:500;color:#3948A5;margin-bottom:16px;
+    }
+    .slim-card p{
+      font-size:16px;line-height:170%;max-width:540px;color:#3948A5;
+    }
+
+    .footer-card{
+      background:#FBF8EF;border:1.5px solid #3948A5;border-radius:34px;
+      padding:40px 55px;margin-bottom:0;
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .footer-card .brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:32px;font-style:italic;font-weight:600;color:#3948A5;
+    }
+    .footer-links{display:flex;gap:26px}
+    .footer-links a{
+      font-size:13px;font-weight:500;letter-spacing:0.06em;
+      color:#3948A5;text-decoration:none;transition:opacity 0.25s;
+    }
+    .footer-links a:hover{opacity:0.7}
+
+    @media(max-width:768px){
+      .slim-card{padding:32px 24px}
+      .slim-card h2{font-size:32px}
+      .footer-card{flex-direction:column;gap:16px;padding:32px 24px}
+      .footer-links{flex-wrap:wrap;gap:16px}
+    }
+
+    /* ── Scroll animation ── */
+    .fade-up{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+    .fade-up.visible{opacity:1;transform:translateY(0)}
+  </style>
 </head>
 <body>
-  <h1>hello world</h1>
+
+<div class="container">
+
+  <!-- ═══ HERO ═══ -->
+  <section class="card hero fade-up visible">
+    <div class="hero-header">
+      <nav class="hero-nav">
+        <a href="#">Case Studies</a>
+        <a href="#">Services</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#3948A5" stroke-width="1.5">
+          <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="#3948A5"/>
+        </svg>
+      </nav>
+      <button class="hero-btn">LET'S SOCIALIZE</button>
+    </div>
+
+    <div class="hero-body">
+      <div class="hero-left">
+        <div class="hero-left-top">
+          <h2>Private AI that lives on your phone — entirely offline.</h2>
+          <p>Footprints runs Qwen 2.5 0.5B on-device via llama.cpp. No cloud, no account, no tracking. Your conversations never leave your Android device.</p>
+        </div>
+        <div class="hero-left-bottom">Footprints</div>
+      </div>
+      <div class="hero-right">
+        <svg viewBox="0 0 400 500" style="width:100%;height:100%;background:#3948A5">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#FBF8EF" opacity="0.15"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="500" fill="url(#grid)"/>
+          <rect x="140" y="100" width="120" height="240" rx="16" fill="#FBF8EF" opacity="0.12" stroke="#FBF8EF" stroke-width="0.5"/>
+          <rect x="148" y="110" width="104" height="12" rx="3" fill="#FBF8EF" opacity="0.08"/>
+          <rect x="148" y="130" width="80" height="6" rx="2" fill="#FBF8EF" opacity="0.06"/>
+          <rect x="148" y="144" width="60" height="6" rx="2" fill="#FBF8EF" opacity="0.06"/>
+          <rect x="170" y="166" width="82" height="6" rx="2" fill="#FBF8EF" opacity="0.08"/>
+          <rect x="148" y="180" width="70" height="6" rx="2" fill="#FBF8EF" opacity="0.06"/>
+          <text x="200" y="420" text-anchor="middle" fill="#FBF8EF" font-size="11" font-family="Inter" opacity="0.4" letter-spacing="2">Qwen 2.5 0.5B</text>
+          <text x="200" y="440" text-anchor="middle" fill="#FBF8EF" font-size="9" font-family="Inter" opacity="0.25" letter-spacing="3">100% OFFLINE</text>
+        </svg>
+        <div class="hero-cta">Let's Chat ↗</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SERVICES ═══ -->
+  <section class="card services fade-up">
+    <div class="services-header">
+      <div class="services-brand">Footprints</div>
+      <nav class="hero-nav">
+        <a href="#">Case Studies</a>
+        <a href="#">Services</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+
+    <div class="services-body">
+      <div class="services-left">
+        <div class="services-label">✦ Our Mission</div>
+        <h2>AI that respects your privacy by architecture, not by policy.</h2>
+        <p>Every component runs locally — from the UI to the inference engine. No data leaves your phone. No servers involved. Just you and a 500M-parameter model.</p>
+      </div>
+      <div class="services-right">
+        <svg class="star" viewBox="0 0 100 100" fill="none">
+          <polygon points="50,5 61,38 96,38 68,59 79,93 50,72 21,93 32,59 4,38 39,38" stroke="#3948A5" stroke-width="1.5" fill="#FBF8EF"/>
+        </svg>
+
+        <div class="accordion">
+          <div class="acc-item"><span>(01) The App — Chat Interface</span><span class="plus">+</span></div>
+          <div class="acc-item"><span>(02) The Engine — llama.cpp</span><span class="plus">+</span></div>
+          <div class="acc-item"><span>(03) The Model — Qwen 2.5 0.5B</span><span class="plus">+</span></div>
+          <div class="acc-item"><span>Capabilities Offered</span><span class="plus">+</span></div>
+        </div>
+
+        <button class="book-btn">GET THE APP</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CASE STUDIES ═══ -->
+  <section class="slim-card fade-up">
+    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;opacity:0.7;margin-bottom:8px">✦ Case Study</div>
+    <h2>Built for the Edge AI era.</h2>
+    <p>Footprints combines Jetpack Compose, llama.cpp, and Qwen 2.5 0.5B into a single APK. The model ships with the app — no downloads, no setup, no internet required.</p>
+  </section>
+
+  <!-- ═══ ABOUT ═══ -->
+  <section class="slim-card fade-up">
+    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#3948A5;opacity:0.7;margin-bottom:8px">✦ About</div>
+    <h2>Your thoughts belong to you.</h2>
+    <p>We believe AI should work for you — not for a data center. Footprints is open source, MIT-licensed, and designed to never phone home.</p>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer-card fade-up">
+    <div class="brand">Footprints</div>
+    <div class="footer-links">
+      <a href="https://github.com/rajumark/Footprints" target="_blank">GitHub</a>
+      <a href="LICENSE">License</a>
+      <a href="https://github.com/rajumark/Footprints/releases" target="_blank">Releases</a>
+      <a href="#">Privacy</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  setTimeout(() => document.querySelector('.fade-up')?.classList.add('visible'), 100);
+</script>
+
 </body>
 </html>
